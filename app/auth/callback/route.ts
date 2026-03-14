@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { createLoginRedirect, getOAuthErrorMessage } from "@/lib/auth";
+import { getErrorLogDetails } from "@/lib/errors";
 import type { Database } from "@/lib/database.types";
 import { getPublicSupabaseEnv } from "@/lib/env";
 import { sanitizeNextPath } from "@/lib/urls";
@@ -8,12 +10,24 @@ import { sanitizeNextPath } from "@/lib/urls";
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const nextPath = sanitizeNextPath(request.nextUrl.searchParams.get("next"));
+  const oauthError = request.nextUrl.searchParams.get("error");
+  const oauthErrorDescription = request.nextUrl.searchParams.get("error_description");
+
+  if (oauthError || oauthErrorDescription) {
+    console.error("[auth:callback]", {
+      description: oauthErrorDescription,
+      error: oauthError,
+    });
+
+    return createLoginRedirect(
+      request,
+      getOAuthErrorMessage(oauthError, oauthErrorDescription),
+      nextPath,
+    );
+  }
 
   if (!code) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("error", "Missing sign-in code. Request a new magic link.");
-
-    return NextResponse.redirect(loginUrl);
+    return createLoginRedirect(request, "Missing sign-in code. Request a new link and try again.", nextPath);
   }
 
   const destination = new URL(nextPath, request.url);
@@ -41,13 +55,13 @@ export async function GET(request: NextRequest) {
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set(
-      "error",
-      "Your sign-in link is invalid or expired. Request a new one.",
-    );
+    console.error("[auth:callback]", getErrorLogDetails(error));
 
-    return NextResponse.redirect(loginUrl);
+    return createLoginRedirect(
+      request,
+      "Your sign-in link is invalid or expired. Request a new one.",
+      nextPath,
+    );
   }
 
   const {
@@ -56,13 +70,15 @@ export async function GET(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set(
-      "error",
-      "Your session could not be established. Request a new magic link.",
-    );
+    if (userError) {
+      console.error("[auth:callback]", getErrorLogDetails(userError));
+    }
 
-    return NextResponse.redirect(loginUrl);
+    return createLoginRedirect(
+      request,
+      "Your session could not be established. Sign in again and retry.",
+      nextPath,
+    );
   }
 
   return response;

@@ -1,12 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { shouldLogAuthError } from "@/lib/auth";
+import { getErrorLogDetails } from "@/lib/errors";
 import type { Database } from "@/lib/database.types";
 import { getPublicSupabaseEnv } from "@/lib/env";
-
-function shouldLogAuthError(error: { name?: string; message?: string }) {
-  return error.name !== "AuthSessionMissingError" && error.message !== "Auth session missing!";
-}
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -42,10 +40,8 @@ export async function updateSession(request: NextRequest) {
 
   if (error && shouldLogAuthError(error)) {
     console.error("[supabase:proxy]", {
-      message: error.message,
-      name: error.name,
       pathname: request.nextUrl.pathname,
-      status: error.status,
+      ...getErrorLogDetails(error),
     });
   }
 

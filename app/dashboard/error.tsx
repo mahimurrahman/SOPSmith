@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
+
+import { getDisplayErrorMessage } from "@/lib/errors";
 
 export default function DashboardError({
   error,
@@ -10,6 +13,10 @@ export default function DashboardError({
   reset: () => void;
 }>) {
   const showRepairHint = error.message.includes("repair SQL");
+  const message = getDisplayErrorMessage(
+    error,
+    "This dashboard section could not load. Please try again in a moment.",
+  );
 
   useEffect(() => {
     console.error(error);
@@ -22,7 +29,7 @@ export default function DashboardError({
         This dashboard section could not load.
       </h2>
       <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
-        {error.message || "Please try again in a moment."}
+        {message}
       </p>
       {showRepairHint ? (
         <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
@@ -30,13 +37,18 @@ export default function DashboardError({
           refresh this page.
         </p>
       ) : null}
-      <button
-        type="button"
-        onClick={reset}
-        className="primary-button mt-6"
-      >
-        Try again
-      </button>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <button
+          type="button"
+          onClick={reset}
+          className="primary-button"
+        >
+          Try again
+        </button>
+        <Link href="/dashboard" className="secondary-button">
+          Return to library
+        </Link>
+      </div>
     </div>
   );
 }

@@ -4,12 +4,27 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { sendMagicLinkAction } from "@/app/login/actions";
+import { Button } from "@/components/ui/Button";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { LoginActionState } from "@/lib/types";
 
 const initialState: LoginActionState = {
   status: "idle",
 };
+
+function getGoogleSignInErrorMessage(message?: string) {
+  const normalized = message?.toLowerCase() ?? "";
+
+  if (normalized.includes("provider") && normalized.includes("not enabled")) {
+    return "Google sign-in is not available right now. Check the Supabase Google provider settings.";
+  }
+
+  if (normalized.includes("invalid") && normalized.includes("redirect")) {
+    return "Google sign-in is misconfigured. Check the Supabase and Google redirect URLs.";
+  }
+
+  return "Google sign-in could not be started right now. Please try again.";
+}
 
 type LoginFormProps = {
   nextPath: string;
@@ -46,14 +61,14 @@ export function LoginForm({ nextPath, notice }: LoginFormProps) {
       });
 
       if (error) {
-        setGoogleError(error.message);
+        setGoogleError(getGoogleSignInErrorMessage(error.message));
         setIsGooglePending(false);
       }
     } catch (error) {
       setGoogleError(
         error instanceof Error
-          ? error.message
-          : "Google sign-in could not be started. Please try again.",
+          ? getGoogleSignInErrorMessage(error.message)
+          : "Google sign-in could not be started right now. Please try again.",
       );
       setIsGooglePending(false);
     }
@@ -72,7 +87,7 @@ export function LoginForm({ nextPath, notice }: LoginFormProps) {
         </p>
       </div>
 
-      <form action={formAction} className="space-y-5">
+      <form action={formAction} className="space-y-5" aria-label="Magic link sign in form">
         <input type="hidden" name="next" value={nextPath} />
 
         <label className="block space-y-2">
@@ -86,11 +101,15 @@ export function LoginForm({ nextPath, notice }: LoginFormProps) {
             name="email"
             placeholder="you@company.com"
             className="field-input"
+            autoComplete="email"
+            aria-required="true"
           />
         </label>
 
         {activeNotice?.message ? (
           <div
+            role="status"
+            aria-live="polite"
             className={`rounded-2xl border px-4 py-3 text-sm leading-6 ${
               activeNotice.tone === "success"
                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
@@ -109,23 +128,26 @@ export function LoginForm({ nextPath, notice }: LoginFormProps) {
       </form>
 
       <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-        <div className="h-px flex-1 bg-white/10" />
+        <div className="h-px flex-1 bg-border" />
         <span>Or</span>
-        <div className="h-px flex-1 bg-white/10" />
+        <div className="h-px flex-1 bg-border" />
       </div>
 
       <div className="space-y-3">
-        <button
-          type="button"
+        <Button
           onClick={handleGoogleSignIn}
           disabled={isGooglePending}
-          className="secondary-button w-full disabled:cursor-not-allowed disabled:opacity-60"
+          variant="secondary"
+          className="w-full"
         >
           {isGooglePending ? "Connecting to Google..." : "Continue with Google"}
-        </button>
+        </Button>
 
         {googleError ? (
-          <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm leading-6 text-rose-200">
+          <div
+            role="alert"
+            className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm leading-6 text-rose-200"
+          >
             {googleError}
           </div>
         ) : null}
@@ -138,12 +160,12 @@ function LoginSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
-      className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60"
+      className="w-full"
     >
       {pending ? "Sending link..." : "Send magic link"}
-    </button>
+    </Button>
   );
 }

@@ -39,13 +39,30 @@ export function CopyButton({ content }: CopyButtonProps) {
     <button
       type="button"
       onClick={handleCopy}
-      className="rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm font-semibold text-foreground"
+      aria-live="polite"
+      aria-label="Copy SOP text to clipboard"
+      className={`rounded-[1.5rem] border px-5 py-3 text-left shadow-soft ${
+        status === "success"
+          ? "border-emerald-500/30 bg-emerald-500/10"
+          : status === "error"
+            ? "border-rose-500/30 bg-rose-500/10"
+            : "border-border bg-surface-muted"
+      }`}
     >
-      {status === "success"
-        ? "Copied!"
-        : status === "error"
-          ? "Copy failed"
-          : "Copy SOP"}
+      <span className="block text-sm font-semibold text-foreground">
+        {status === "success"
+          ? "Copied to clipboard"
+          : status === "error"
+            ? "Copy failed"
+            : "Copy SOP"}
+      </span>
+      <span className="mt-1 block text-xs leading-5 text-muted">
+        {status === "success"
+          ? "Ready to paste anywhere you need it."
+          : status === "error"
+            ? "Clipboard access was blocked. Try again."
+            : "Plain text with spacing preserved."}
+      </span>
     </button>
   );
 }

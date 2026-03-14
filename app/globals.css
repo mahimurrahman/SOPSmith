@@ -1,27 +1,22 @@
+@import "../styles/design-system.css";
 @import "tailwindcss";
-
-:root {
-  --background: #091018;
-  --foreground: #eff4fb;
-  --muted: #9aa7b8;
-  --card: rgba(15, 23, 34, 0.82);
-  --card-strong: rgba(10, 16, 24, 0.94);
-  --border: rgba(255, 255, 255, 0.1);
-  --accent: #f59e0b;
-  --accent-foreground: #10151c;
-}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
-  --color-card: var(--card);
-  --color-card-strong: var(--card-strong);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-muted: var(--surface-muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --font-sans: "Aptos", "Segoe UI", "Helvetica Neue", sans-serif;
-  --font-mono: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-sans-stack);
+  --font-mono: var(--font-mono-stack);
 }
 
 * {
@@ -35,104 +30,133 @@ html {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), transparent 20rem),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 24rem),
-    radial-gradient(circle at bottom right, rgba(148, 163, 184, 0.08), transparent 24rem),
+    radial-gradient(circle at top left, var(--backdrop-top-left), transparent 20rem),
+    radial-gradient(circle at top right, var(--backdrop-top-right), transparent 24rem),
+    radial-gradient(circle at bottom right, var(--backdrop-bottom-right), transparent 24rem),
     var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-sans-stack);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 ::selection {
-  background: rgba(245, 158, 11, 0.22);
+  background: var(--selection);
 }
 
 a,
 button,
 input,
-textarea {
+textarea,
+summary {
   transition:
     color 150ms ease,
     background-color 150ms ease,
     border-color 150ms ease,
     box-shadow 150ms ease,
-    opacity 150ms ease;
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--ring);
 }
 
 .page-shell {
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)),
+    linear-gradient(180deg, color-mix(in srgb, var(--foreground) 3%, transparent), transparent),
     transparent;
 }
 
 .surface-card {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
-    var(--card);
-  backdrop-filter: blur(16px);
+    linear-gradient(180deg, color-mix(in srgb, var(--foreground) 5%, transparent), transparent),
+    var(--surface);
+  backdrop-filter: blur(18px);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-panel);
+}
+
+.muted-panel {
+  border: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  background: var(--surface-muted);
 }
 
 .field-input {
   width: 100%;
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(9, 16, 24, 0.88);
+  border-radius: 1.1rem;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-strong) 92%, var(--background));
   padding: 0.95rem 1rem;
   color: var(--foreground);
   outline: none;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
 }
 
 .field-input:focus {
-  border-color: rgba(245, 158, 11, 0.75);
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.14);
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 4px var(--ring),
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 4%, transparent);
 }
 
 .field-input::placeholder {
-  color: rgba(154, 167, 184, 0.72);
+  color: color-mix(in srgb, var(--muted) 82%, transparent);
 }
 
 .primary-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 2.75rem;
   border-radius: 9999px;
   background: var(--foreground);
-  padding: 0.85rem 1.25rem;
+  padding: 0.8rem 1.25rem;
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--accent-foreground);
+  box-shadow: var(--shadow-soft);
 }
 
 .primary-button:hover {
-  opacity: 0.92;
+  transform: translateY(-1px);
+  opacity: 0.96;
 }
 
 .secondary-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 2.75rem;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.85rem 1.25rem;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  padding: 0.8rem 1.25rem;
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--foreground);
 }
 
 .secondary-button:hover {
-  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
 }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
   padding: 0.45rem 0.8rem;
   font-size: 0.72rem;
   font-weight: 700;
@@ -141,13 +165,24 @@ textarea {
   color: var(--muted);
 }
 
-.muted-panel {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.025);
+.rounded-panel {
+  border-radius: var(--radius-panel);
+}
+
+.section-copy {
+  max-width: 40rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
 }
 
 .skeleton-block {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.035));
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--foreground) 3%, transparent),
+      color-mix(in srgb, var(--foreground) 8%, transparent),
+      color-mix(in srgb, var(--foreground) 3%, transparent)
+    );
 }

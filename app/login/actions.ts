@@ -1,8 +1,7 @@
 "use server";
 
-import type { LoginActionState } from "@/lib/types";
-import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { getRequestOrigin, sanitizeNextPath } from "@/lib/urls";
+import { requestMagicLinkSignIn, type LoginActionState } from "@/lib/auth";
+import { sanitizeNextPath } from "@/lib/urls";
 import { loginSchema } from "@/lib/validators";
 
 export async function sendMagicLinkAction(
@@ -23,35 +22,14 @@ export async function sendMagicLinkAction(
   }
 
   try {
-    const supabase = await createServerSupabaseClient();
-    const origin = await getRequestOrigin();
-    const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
-    const { error } = await supabase.auth.signInWithOtp({
+    return requestMagicLinkSignIn({
       email: parsed.data.email,
-      options: {
-        emailRedirectTo: redirectTo,
-        shouldCreateUser: true,
-      },
+      nextPath,
     });
-
-    if (error) {
-      return {
-        status: "error",
-        message: error.message,
-      };
-    }
-
-    return {
-      status: "success",
-      message: `Magic link sent to ${parsed.data.email}. Open it on this device to continue. If it does not appear, check spam or promotions.`,
-    };
   } catch (error) {
     return {
       status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : "We could not send your magic link right now.",
+      message: error instanceof Error ? error.message : "We could not send your magic link right now.",
     };
   }
 }

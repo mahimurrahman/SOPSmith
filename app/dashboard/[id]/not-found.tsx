@@ -5,14 +5,20 @@ export default function SopNotFound() {
     <div className="surface-card rounded-[2rem] px-6 py-10">
       <div className="eyebrow">SOP not found</div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-        That SOP does not exist or you do not have access to it.
+        This SOP is missing or belongs to a different account.
       </h1>
       <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
-        Head back to your library to open another SOP or generate a new one.
+        It may have been deleted, the link may be outdated, or you may be signed in with
+        a different account.
       </p>
-      <Link href="/dashboard" className="primary-button mt-6">
-        Return to library
-      </Link>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <Link href="/dashboard" className="primary-button">
+          Return to library
+        </Link>
+        <Link href="/dashboard/new" className="secondary-button">
+          Create a new SOP
+        </Link>
+      </div>
     </div>
   );
 }
