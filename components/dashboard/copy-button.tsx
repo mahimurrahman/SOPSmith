@@ -41,27 +41,19 @@ export function CopyButton({ content }: CopyButtonProps) {
       onClick={handleCopy}
       aria-live="polite"
       aria-label="Copy SOP text to clipboard"
-      className={`rounded-[1.5rem] border px-5 py-3 text-left shadow-soft ${
+      className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg active:scale-95 ${
         status === "success"
-          ? "border-emerald-500/30 bg-emerald-500/10"
+          ? "bg-emerald-500 text-white shadow-emerald-500/25 shadow-lg"
           : status === "error"
-            ? "border-rose-500/30 bg-rose-500/10"
-            : "border-border bg-surface-muted"
+            ? "bg-rose-500 text-white shadow-rose-500/25 shadow-lg"
+            : "bg-primary text-white shadow-primary/25 hover:bg-primary/90"
       }`}
     >
-      <span className="block text-sm font-semibold text-foreground">
-        {status === "success"
-          ? "Copied to clipboard"
-          : status === "error"
-            ? "Copy failed"
-            : "Copy SOP"}
+      <span className="material-symbols-outlined text-[18px]">
+        {status === "success" ? "check" : status === "error" ? "error" : "content_copy"}
       </span>
-      <span className="mt-1 block text-xs leading-5 text-muted">
-        {status === "success"
-          ? "Ready to paste anywhere you need it."
-          : status === "error"
-            ? "Clipboard access was blocked. Try again."
-            : "Plain text with spacing preserved."}
+      <span>
+        {status === "success" ? "Copied!" : status === "error" ? "Failed" : "Copy SOP"}
       </span>
     </button>
   );

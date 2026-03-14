@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
-import { cn } from "@/lib/cn";
+import { Toast } from "@/components/ui/Toast";
 
 type ToastTone = "default" | "error" | "success";
 
@@ -75,34 +75,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         className="pointer-events-none fixed inset-x-0 top-4 z-50 mx-auto flex max-w-md flex-col gap-3 px-4"
       >
         {toasts.map((toast) => (
-          <div
+          <Toast
             key={toast.id}
-            className={cn(
-              "pointer-events-auto rounded-[1.35rem] border px-4 py-3 shadow-panel backdrop-blur-md",
-              toast.tone === "success" &&
-                "border-emerald-500/30 bg-emerald-500/12 text-emerald-100",
-              toast.tone === "error" && "border-rose-500/30 bg-rose-500/12 text-rose-100",
-              toast.tone === "default" && "border-border bg-surface-strong text-foreground",
-            )}
-            role="status"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-1">
-                <p className="text-sm font-semibold">{toast.title}</p>
-                {toast.description ? (
-                  <p className="text-sm leading-6 text-current/85">{toast.description}</p>
-                ) : null}
-              </div>
-              <button
-                type="button"
-                onClick={() => dismissToast(toast.id)}
-                className="rounded-full px-2 py-1 text-xs font-semibold text-current/80 hover:bg-black/10"
-                aria-label="Dismiss notification"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+            title={toast.title}
+            description={toast.description}
+            tone={toast.tone}
+            onDismiss={() => dismissToast(toast.id)}
+          />
         ))}
       </div>
     </ToastContext.Provider>

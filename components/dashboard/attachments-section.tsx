@@ -3,11 +3,12 @@
 import { useState } from "react";
 
 import type { SopFileSummary } from "@/lib/attachments/types";
-import { getAttachmentKind, sanitizeAttachmentFileName } from "@/lib/attachments/shared";
-import { cn } from "@/lib/cn";
+import { sanitizeAttachmentFileName } from "@/lib/attachments/shared";
 import { formatDate, formatFileSize } from "@/lib/format";
 
 import { useToast } from "../ui/toast-provider";
+import { Card } from "../ui/Card";
+import { FileTypeIcon } from "../ui/FileTypeIcon";
 
 type AttachmentsSectionProps = {
   attachments: SopFileSummary[];
@@ -63,85 +64,60 @@ export function AttachmentsSection({ attachments, sopId }: AttachmentsSectionPro
 
   if (attachments.length === 0) {
     return (
-      <section className="space-y-3" aria-labelledby="attachments-heading">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p id="attachments-heading" className="text-lg font-semibold tracking-tight text-foreground">
-              Attachments
-            </p>
-            <p className="mt-1 text-sm leading-6 text-muted">
-              Source files for this SOP will appear here once uploaded.
-            </p>
-          </div>
-        </div>
-
-        <div className="rounded-[1.5rem] border border-dashed border-border bg-surface-muted px-5 py-6 text-sm leading-6 text-muted">
-          No files are attached to this SOP yet.
-        </div>
-      </section>
+      <div className="rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 px-5 py-6 text-sm leading-6 text-slate-500 text-center">
+        No files attached to this SOP yet.
+      </div>
     );
   }
 
   return (
-    <section className="space-y-4" aria-labelledby="attachments-heading">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p id="attachments-heading" className="text-lg font-semibold tracking-tight text-foreground">
-            Attachments
-          </p>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            Open the original source files with short-lived signed links.
-          </p>
-        </div>
-        <div className="rounded-full border border-border bg-surface-muted px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-          {attachments.length} file{attachments.length === 1 ? "" : "s"}
-        </div>
-      </div>
+    <div className="space-y-3">
+      {attachments.map((file) => {
+        const displayName = sanitizeAttachmentFileName(file.fileName);
+        
+        // Pick an icon based on fileType
+        let iconName = "draft";
+        let iconColorClass = "text-slate-500 bg-slate-500/10";
+        if (file.fileType.includes("pdf")) {
+          iconName = "description";
+          iconColorClass = "text-red-500 bg-red-500/10";
+        } else if (file.fileType.includes("image")) {
+          iconName = "image";
+          iconColorClass = "text-blue-500 bg-blue-500/10";
+        }
 
-      <ul className="space-y-3" aria-label="SOP attachments">
-        {attachments.map((file) => {
-          const displayName = sanitizeAttachmentFileName(file.fileName);
-          const kind = getAttachmentKind(file.fileType, displayName);
-
-          return (
-            <li key={file.id} className="surface-card rounded-[1.5rem] px-4 py-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-start gap-3">
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-xs font-black tracking-[0.2em]",
-                        kind === "pdf" && "bg-rose-500/14 text-rose-200",
-                        kind === "doc" && "bg-sky-500/14 text-sky-100",
-                        kind === "text" && "bg-emerald-500/14 text-emerald-100",
-                      )}
-                    >
-                      {kind === "pdf" ? "PDF" : kind === "doc" ? "DOC" : "TXT"}
-                    </span>
-
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-foreground">{displayName}</p>
-                      <p className="mt-1 text-xs leading-5 text-muted">
-                        {formatFileSize(file.fileSize)} - Added {formatDate(file.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleDownload(file)}
-                  disabled={activeFileId === file.id}
-                  className="secondary-button min-w-36"
-                >
-                  {activeFileId === file.id ? "Preparing..." : "Download"}
-                </button>
+        return (
+          <button
+            type="button"
+            key={file.id}
+            onClick={() => handleDownload(file)}
+            disabled={activeFileId === file.id}
+            className="w-full text-left flex items-center justify-between p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary transition-all group cursor-pointer shadow-sm hover:shadow-md disabled:opacity-50"
+          >
+            <div className="flex items-center gap-4 overflow-hidden">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${iconColorClass}`}>
+                <span className="material-symbols-outlined text-[20px]">{iconName}</span>
               </div>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+              <div className="truncate">
+                <p className="text-[13px] font-bold truncate text-slate-900 dark:text-white">
+                  {displayName}
+                </p>
+                <p className="text-[10px] text-slate-500 uppercase font-extrabold tracking-tighter">
+                  {formatFileSize(file.fileSize)} • Added {formatDate(file.createdAt)}
+                </p>
+              </div>
+            </div>
+            
+            {activeFileId === file.id ? (
+              <span className="text-xs font-semibold text-slate-400">Wait...</span>
+            ) : (
+              <span className="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-[20px]">
+                download
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 }

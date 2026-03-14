@@ -11,6 +11,12 @@ type ThemeSnapshot = {
 
 const THEME_STORAGE_KEY = "sopsmith-theme";
 const THEME_EVENT = "sopsmith-theme-change";
+const SERVER_SNAPSHOT: ThemeSnapshot = {
+  preference: "system",
+  resolvedTheme: "dark",
+};
+
+let cachedSnapshot: ThemeSnapshot = SERVER_SNAPSHOT;
 
 function getSystemTheme(): Theme {
   if (typeof window === "undefined") {
@@ -32,18 +38,25 @@ function getStoredThemePreference(): ThemePreference {
 
 function getSnapshot(): ThemeSnapshot {
   const preference = getStoredThemePreference();
+  const resolvedTheme = preference === "system" ? getSystemTheme() : preference;
 
-  return {
+  if (
+    cachedSnapshot.preference === preference &&
+    cachedSnapshot.resolvedTheme === resolvedTheme
+  ) {
+    return cachedSnapshot;
+  }
+
+  cachedSnapshot = {
     preference,
-    resolvedTheme: preference === "system" ? getSystemTheme() : preference,
+    resolvedTheme,
   };
+
+  return cachedSnapshot;
 }
 
 function getServerSnapshot(): ThemeSnapshot {
-  return {
-    preference: "system",
-    resolvedTheme: "dark",
-  };
+  return SERVER_SNAPSHOT;
 }
 
 function subscribe(onStoreChange: () => void) {

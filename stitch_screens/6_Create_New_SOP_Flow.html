@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOPSmith - Create New SOP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0a0f16",
+                    },
+                    fontFamily: {
+                        "sans": ["'Plus Jakarta Sans'", "Inter", "sans-serif"],
+                        "mono": ["'JetBrains Mono'", "monospace"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "2xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(60, 131, 246, 0.5);
+            outline: none;
+            box-shadow: 0 0 0 1px rgba(60, 131, 246, 0.3);
+        }
+        .mono-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-200 min-h-screen selection:bg-primary/30">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800/60 px-6 py-4 lg:px-12 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-40">
+<div class="flex items-center gap-3">
+<div class="size-7 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+</div>
+<h2 class="text-lg font-extrabold tracking-tight">SOPSmith</h2>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<nav class="flex items-center gap-8">
+<a class="text-[13px] font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-[13px] font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Operations Hub</a>
+<a class="text-[13px] font-semibold text-slate-500 hover:text-primary transition-colors" href="#">Compliance</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg text-slate-400 hover:text-slate-100 transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="p-2 rounded-lg text-slate-400 hover:text-slate-100 transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<div class="size-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden ml-2">
+<img alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT9LkJ1E1LG2mJzb5XF0dde7ZmEwtaIkVyrFbcNTjoiJmmVBbG9TYnSN-mTNknEmwjt13as72IsuPoQxAkbFwMsJhixnurRZMj-yXKhpIy6S1M5M_vBE0VRJXSxPYe_PNPCsmNWbelqlxvLS1f66DzyC1WcI3tNhrPBQKW7NPrgW7klq6sqs0K-0w0w5Vjve1GcALSxO0OkMkq2lmDZ35uh0zblQQW_4aFSTFzmQT6VbV_tKOS5fgBhnp4GbdkpK-EiDIAh8iyY-xR"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full p-6 lg:p-16">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-10">
+<span class="mono-label text-slate-500">Workspace</span>
+<span class="material-symbols-outlined text-xs text-slate-600">chevron_right</span>
+<span class="mono-label text-slate-200">New Procedure</span>
+</div>
+<div class="flex flex-col lg:flex-row gap-20">
+<!-- Left Column: Guidance Panel (32%) -->
+<aside class="w-full lg:w-[32%] space-y-10">
+<div class="space-y-6">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-primary/80">Documentation Standards</h3>
+<ul class="space-y-8">
+<li class="flex gap-5">
+<span class="material-symbols-outlined text-primary text-[20px] mt-1">account_tree</span>
+<div>
+<p class="text-[15px] font-bold text-slate-100">Functional Decomposition</p>
+<p class="text-sm text-slate-500 leading-relaxed mt-1">Detail granular sub-tasks to ensure cross-departmental consistency.</p>
+</div>
+</li>
+<li class="flex gap-5">
+<span class="material-symbols-outlined text-primary text-[20px] mt-1">engineering</span>
+<div>
+<p class="text-[15px] font-bold text-slate-100">Resource Allocation</p>
+<p class="text-sm text-slate-500 leading-relaxed mt-1">Specify required software environment and access tiering.</p>
+</div>
+</li>
+<li class="flex gap-5">
+<span class="material-symbols-outlined text-primary text-[20px] mt-1">verified_user</span>
+<div>
+<p class="text-[15px] font-bold text-slate-100">Compliance Gates</p>
+<p class="text-sm text-slate-500 leading-relaxed mt-1">Embed mandatory validation steps to meet ISO standards.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+<span class="mono-label text-primary mb-3 block">Operational Tip</span>
+<p class="text-sm text-slate-400 leading-relaxed italic">"Optimal SOPs prioritize 'How' over 'What'. Use imperative verbs to maintain instructional clarity across the workflow."</p>
+</div>
+</aside>
+<!-- Right Column: Form Area (68%) -->
+<section class="flex-1 space-y-12">
+<div class="space-y-4">
+<h1 class="text-5xl font-extrabold tracking-tight text-white">Synthesize Process</h1>
+<p class="text-slate-400 text-lg font-medium">Capture unstructured operational intelligence and transform it into enterprise-grade documentation.</p>
+</div>
+<form class="space-y-8">
+<!-- SOP Title -->
+<div class="space-y-3">
+<label class="mono-label text-slate-400">Procedure Title</label>
+<input class="w-full glass-input px-5 py-4 rounded-xl text-slate-100 placeholder:text-slate-700" placeholder="e.g., End-of-Quarter Financial Reconciliation" type="text"/>
+</div>
+<!-- Rough Notes -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="mono-label text-slate-400">Operational Raw Data</label>
+<span class="text-[10px] text-slate-600 font-mono">MD SUPPORTED</span>
+</div>
+<textarea class="w-full glass-input px-5 py-4 rounded-xl text-slate-100 placeholder:text-slate-700 resize-none font-sans leading-relaxed" placeholder="Input workflow fragments, meeting transcripts, or rough instructional steps..." rows="10"></textarea>
+</div>
+<!-- File Upload -->
+<div class="space-y-4">
+<label class="mono-label text-slate-400">Reference Artifacts</label>
+<div class="border border-dashed border-slate-800 rounded-2xl p-10 flex flex-col items-center justify-center gap-4 bg-white/[0.01] hover:bg-white/[0.03] transition-all cursor-pointer group">
+<div class="size-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">attachment</span>
+</div>
+<div class="text-center">
+<p class="text-[15px] font-bold text-slate-300">Upload documentation</p>
+<p class="text-xs text-slate-500 mt-1">Support for CSV, PDF, and high-res screen captures (Max 50MB)</p>
+</div>
+</div>
+<!-- Uploaded Files List -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+<div class="flex items-center justify-between p-4 rounded-xl glass-input group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">description</span>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold text-slate-300">fiscal_policy_2024.pdf</span>
+<span class="text-[11px] text-slate-600 font-mono">1.8 MB</span>
+</div>
+</div>
+<button class="text-slate-600 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl glass-input group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">terminal</span>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold text-slate-300">cli_deployment_log.txt</span>
+<span class="text-[11px] text-slate-600 font-mono">24 KB</span>
+</div>
+</div>
+<button class="text-slate-600 hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-6">
+<button class="w-full py-5 bg-primary hover:bg-primary/90 text-white rounded-xl font-extrabold text-[15px] tracking-wide shadow-[0_20px_40px_-15px_rgba(60,131,246,0.3)] transition-all active:scale-[0.99]" type="button">
+                            GENERATE FORMALIZED PROCEDURE
+                        </button>
+</div>
+</form>
+</section>
+</div>
+</main>
+<!-- Footer Pill / Bottom Nav -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-2xl bg-slate-900/90 border border-slate-800/50 backdrop-blur-2xl flex items-center gap-6 shadow-2xl z-40">
+<button class="flex items-center gap-2.5 px-5 py-2 rounded-xl bg-primary text-white text-[13px] font-bold tracking-tight shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Create New
+        </button>
+<div class="w-px h-5 bg-slate-800"></div>
+<div class="flex items-center gap-5">
+<button class="text-slate-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</button>
+<button class="text-slate-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">layers</span>
+</button>
+<button class="text-slate-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

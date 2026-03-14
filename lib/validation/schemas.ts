@@ -13,10 +13,6 @@ export const createSopSchema = z.object({
   rawNotes: z
     .string()
     .trim()
-    .min(
-      60,
-      "Add a bit more detail: include the start point, key steps, owner, tools, output, checks, or edge cases.",
-    )
     .max(6000, "Keep the rough notes under 6,000 characters so they stay focused."),
 });
 

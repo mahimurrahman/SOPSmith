@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0a0f18",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-panel {
+            background: rgba(16, 23, 34, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gradient-bg {
+            background: radial-gradient(circle at 50% -20%, #1e293b, #0a0f18);
+        }
+        .letter-spacing-tight {
+            letter-spacing: -0.02em;
+        }
+        .letter-spacing-wide {
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-6 gradient-bg">
+<!-- Background Decoration -->
+<div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[150px]"></div>
+</div>
+<!-- Main Content Container -->
+<div class="w-full max-w-[440px] flex flex-col items-center gap-10">
+<!-- Brand Header -->
+<div class="flex flex-col items-center gap-3">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-11 flex items-center justify-center bg-primary/10 rounded-xl border border-primary/20 shadow-inner">
+<span class="material-symbols-outlined text-3xl font-light">terminal</span>
+</div>
+<h2 class="text-2xl font-extrabold font-display tracking-tight text-slate-100">SOPSmith</h2>
+</div>
+<p class="text-slate-400 text-[13px] font-medium letter-spacing-wide uppercase">Infrastructure Operations Platform</p>
+</div>
+<!-- Auth Card -->
+<div class="glass-panel w-full rounded-2xl p-10 shadow-2xl">
+<div class="flex flex-col gap-8">
+<div class="text-center">
+<h1 class="text-2xl font-bold font-display text-white mb-2 letter-spacing-tight">Access Control Center</h1>
+<p class="text-slate-400 text-sm leading-relaxed">Secure authentication for institutional operations.</p>
+</div>
+<!-- Form Section -->
+<div class="flex flex-col gap-5">
+<div class="flex flex-col gap-2">
+<label class="text-slate-400 text-[11px] font-bold uppercase tracking-[0.1em] px-1">Professional Email</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xl group-focus-within:text-primary transition-colors duration-300">mail</span>
+<input class="w-full bg-slate-950/40 border border-slate-800 rounded-xl py-3.5 pl-12 pr-4 text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-primary/40 focus:border-primary/50 transition-all duration-300 text-sm" placeholder="e.g. ops-lead@organization.io" type="email"/>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold font-display py-4 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-xl shadow-primary/10 border border-primary/20">
+<span class="text-sm">Initiate Secure Login</span>
+<span class="material-symbols-outlined text-lg">bolt</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="flex items-center gap-4 py-2">
+<div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-slate-800 to-transparent"></div>
+<span class="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">Federated Auth</span>
+<div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-slate-800 to-transparent"></div>
+</div>
+<!-- Social Login -->
+<button class="w-full bg-white hover:bg-slate-50 text-slate-900 font-bold font-display py-3.5 rounded-xl transition-all flex items-center justify-center gap-3 border border-slate-200 text-sm shadow-sm">
+<img alt="" class="w-5 h-5" data-alt="Google colorful brand logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV3ppaXFF1OZDLVKxy_JBgKF0JxNT1D7ZTAKV5zXZ8sBCjgrjDCeC235MHRi5FNlhmIXO-Pjyl13ds4XsVul8w3onLAEhtZF3cUaBvh_lnLCK4w0MWnn_On61EHsSCTQhO1uUkz0LeBJ-Zq_1AXh77D2RWmOv3xa5Q9YTj8B_QgrB2rFRARXiROtUnnXqiexmgXG8cACx01cEXLIbKJKTPyIw6CdpUCqSQEqV-7mCc6ej7wwvF1iQG-aAp0_zjdlNeZPLlyUzQJFSj"/>
+<span>Enterprise SSO with Google</span>
+</button>
+</div>
+</div>
+<!-- Success Toast Preview (Visible in mock) -->
+<div class="glass-panel border-emerald-500/20 bg-emerald-500/5 w-full rounded-xl px-5 py-4 flex items-center gap-4">
+<span class="material-symbols-outlined text-emerald-400 text-2xl font-light">verified_user</span>
+<div class="flex-1">
+<p class="text-emerald-400 text-[13px] font-bold font-display letter-spacing-tight">Link Transmitted</p>
+<p class="text-slate-400 text-[12px] leading-snug">Verification protocol initiated. Check your inbox for access credentials.</p>
+</div>
+</div>
+<!-- Footer Links -->
+<div class="flex flex-col items-center gap-6">
+<div class="flex items-center gap-8 text-xs font-medium">
+<a class="text-slate-400 hover:text-primary transition-colors border-b border-transparent hover:border-primary/30 pb-0.5" href="#">Provision Account</a>
+<span class="w-1 h-1 bg-slate-800 rounded-full"></span>
+<a class="text-slate-400 hover:text-primary transition-colors border-b border-transparent hover:border-primary/30 pb-0.5" href="#">System Status</a>
+</div>
+<div class="flex flex-col items-center gap-1.5 opacity-60">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-sm font-light">encrypted</span>
+<span class="text-[10px] font-bold uppercase tracking-[0.15em]">SOC2 Type II Compliant Infrastructure</span>
+</div>
+</div>
+</div>
+</div>
+</body></html>

@@ -11,48 +11,59 @@ export const metadata: Metadata = {
 
 export default function NewSopPage() {
   return (
-    <Grid as="section" className="lg:grid-cols-[0.92fr_1.08fr]" gap="md">
-      <Card className="space-y-5 rounded-[2rem] px-6 py-6">
-        <div className="space-y-3">
-          <div className="eyebrow">Generate SOP</div>
-          <h1 className="text-h1 font-semibold tracking-tight text-foreground">
-            Turn rough process notes and source files into a polished SOP draft.
-          </h1>
-          <p className="section-copy">
-            Add a strong title and the rough notes you already have. The better your source
-            notes capture the real workflow, the more usable the SOP will be on the first pass.
-          </p>
-        </div>
+    <>
+      <div className="flex items-center gap-2 mb-10">
+        <span className="mono-label text-slate-500">Workspace</span>
+        <span className="material-symbols-outlined text-xs text-slate-600">chevron_right</span>
+        <span className="mono-label text-slate-900 dark:text-slate-200">New Procedure</span>
+      </div>
 
-        <Card className="rounded-[1.5rem] px-5 py-5">
-          <p className="text-sm font-semibold text-foreground">Include these details when you can</p>
-          <ul className="mt-3 space-y-3 text-sm leading-6 text-muted">
-            <li>The trigger or start point that kicks off the process</li>
-            <li>The owner or role responsible for doing the work</li>
-            <li>Key steps, tools used, and the expected output</li>
-            <li>Approvals, quality checks, and what counts as done</li>
-            <li>Edge cases, blockers, delays, or escalation paths</li>
-          </ul>
-        </Card>
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-20">
+        {/* Left Column: Guidance Panel (32%) */}
+        <aside className="w-full lg:w-[32%] space-y-10">
+          <div className="space-y-6">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-primary/80">Documentation Standards</h3>
+            <ul className="space-y-8">
+              <li className="flex gap-5">
+                <span className="material-symbols-outlined text-primary text-[20px] mt-1">account_tree</span>
+                <div>
+                  <p className="text-[15px] font-bold text-slate-900 dark:text-slate-100">Functional Decomposition</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mt-1">Detail granular sub-tasks to ensure cross-departmental consistency.</p>
+                </div>
+              </li>
+              <li className="flex gap-5">
+                <span className="material-symbols-outlined text-primary text-[20px] mt-1">engineering</span>
+                <div>
+                  <p className="text-[15px] font-bold text-slate-900 dark:text-slate-100">Resource Allocation</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mt-1">Specify required software environment and access tiering.</p>
+                </div>
+              </li>
+              <li className="flex gap-5">
+                <span className="material-symbols-outlined text-primary text-[20px] mt-1">verified_user</span>
+                <div>
+                  <p className="text-[15px] font-bold text-slate-900 dark:text-slate-100">Compliance Gates</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mt-1">Embed mandatory validation steps to meet ISO standards.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
 
-        <Card className="rounded-[1.5rem] px-5 py-5">
-          <p className="text-sm font-semibold text-foreground">Optional file uploads</p>
-          <ul className="mt-3 space-y-3 text-sm leading-6 text-muted">
-            <li>Attach PDFs, DOC or DOCX files, and TXT notes after the SOP draft is created</li>
-            <li>Keep source material with the SOP so anyone opening it can trust the context</li>
-            <li>Use uploads for handoff docs, QA checklists, brief notes, and working instructions</li>
-          </ul>
-        </Card>
+          <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/60 shadow-sm">
+            <span className="mono-label text-primary mb-3 block">Operational Tip</span>
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed italic">"Optimal SOPs prioritize 'How' over 'What'. Use imperative verbs to maintain instructional clarity across the workflow."</p>
+          </div>
+        </aside>
 
-        <Card tone="muted" className="rounded-[1.5rem] px-5 py-5 text-sm leading-6 text-muted">
-          Keep the notes messy if you want. SOPSmith is designed to clean up real-world
-          scraps like bullets, half sentences, handoff notes, and operational reminders.
-        </Card>
-      </Card>
+        {/* Right Column: Form Area (68%) */}
+        <section className="flex-1 space-y-12">
+          <div className="space-y-4">
+            <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-display">Synthesize Process</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">Capture unstructured operational intelligence and transform it into enterprise-grade documentation.</p>
+          </div>
 
-      <Card className="rounded-[2rem] px-6 py-6">
-        <CreateSopForm />
-      </Card>
-    </Grid>
+          <CreateSopForm />
+        </section>
+      </div>
+    </>
   );
 }

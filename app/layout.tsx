@@ -1,8 +1,25 @@
 import type { Metadata, Viewport } from "next";
+import { JetBrains_Mono, Outfit, Plus_Jakarta_Sans } from "next/font/google";
 
 import { ToastProvider } from "@/components/ui/toast-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "./globals.css";
+
+const sansFont = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const displayFont = Outfit({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   applicationName: "SOPSmith",
@@ -45,8 +62,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning className="bg-background text-foreground antialiased">
-        <ToastProvider>{children}</ToastProvider>
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+      </head>
+      <body
+        suppressHydrationWarning
+        className={`${sansFont.variable} ${displayFont.variable} ${monoFont.variable} bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOP Detail - SOPSmith Premium</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0a0f16",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.625rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        .step-number {
+            font-feature-settings: "tnum" on, "lnum" on;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-300 min-h-screen font-sans">
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800/60 bg-white/70 dark:bg-background-dark/70 backdrop-blur-xl">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-20 items-center justify-between">
+<div class="flex items-center gap-4">
+<a class="group flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span class="text-xs font-semibold uppercase tracking-widest">Library</span>
+</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-full font-bold text-sm hover:bg-blue-600 transition-all shadow-lg shadow-primary/25 active:scale-95">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Duplicate</span>
+</button>
+<div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
+<button class="flex items-center gap-2 px-4 py-2.5 bg-transparent text-slate-600 dark:text-slate-300 rounded-lg font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</button>
+<button class="flex items-center justify-center p-2.5 bg-transparent text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<div class="ml-2 w-9 h-9 rounded-full ring-2 ring-slate-100 dark:ring-slate-800 overflow-hidden cursor-pointer hover:ring-primary/40 transition-all">
+<div class="w-full h-full bg-cover bg-center" data-alt="User profile avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_FaxVHFHDc1eJY9cqX6aiwz4ueCuP136We00osPMe8Ey2y_lZMLVBczGQY5UU58wWIstQUP7QZd-mYXwB0Q8AV_tHDiw1ZTTe2d28CXZf-STHuXxW2pG0xBt4m9zY5UPpnLJNgxV8u7JPiVZaSaAhqGFAU9_PINF_Bo-XJ6pp2TeXWEl9ei4vWEeeXHhAgsuUoNNCMGxROIiCFiYRMlrPDuHwQQBmx6v7Kpqw9DGDlIboM_823zWm_tyL9U_8P7mbH1HQrEPxFO1r')"></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<div class="lg:col-span-8">
+<header class="mb-14">
+<div class="flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-6">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 12, 2023</span>
+<span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+<span class="flex items-center gap-1.5 text-primary"><span class="material-symbols-outlined text-[14px]">verified</span> v2.4 Active</span>
+</div>
+<h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-8">
+                    Omnichannel Content Governance &amp; Workflow
+                </h1>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider rounded">Marketing Ops</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider rounded">Social Strategy</span>
+<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">High Priority</span>
+</div>
+</header>
+<div class="space-y-16">
+<section>
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Strategic Objective
+                    </h2>
+<p class="text-xl leading-relaxed text-slate-700 dark:text-slate-300 font-medium">
+                        To standardize the end-to-end lifecycle of social media assets—from ideation through multi-stakeholder approval to automated distribution—ensuring rigorous brand compliance and data-driven engagement optimization.
+                    </p>
+</section>
+<section>
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Operational Scope
+                    </h2>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                        Encompasses all global social ecosystems including LinkedIn (Executive Thought Leadership), Instagram (Visual Storytelling), and X/Twitter (Real-time Engagement). This protocol governs both organic initiatives and paid amplification performance assets.
+                    </p>
+</section>
+<section>
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Technology Stack
+                    </h2>
+<ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<li class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800/50 hover:border-primary/50 transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">hub</span>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-white text-sm">Sprout Social</span>
+<span class="text-[11px] text-slate-500 uppercase tracking-tighter">Scheduling Engine</span>
+</div>
+</li>
+<li class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800/50 hover:border-primary/50 transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">palette</span>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-white text-sm">Figma Enterprise</span>
+<span class="text-[11px] text-slate-500 uppercase tracking-tighter">Asset Repository</span>
+</div>
+</li>
+<li class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800/50 hover:border-primary/50 transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">spellcheck</span>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-white text-sm">Grammarly Business</span>
+<span class="text-[11px] text-slate-500 uppercase tracking-tighter">Syntactic Review</span>
+</div>
+</li>
+<li class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800/50 hover:border-primary/50 transition-colors group">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg group-hover:bg-primary group-hover:text-white transition-all">forum</span>
+<div class="flex flex-col">
+<span class="font-bold text-slate-900 dark:text-white text-sm">Slack Channels</span>
+<span class="text-[11px] text-slate-500 uppercase tracking-tighter">Asynchronous Comms</span>
+</div>
+</li>
+</ul>
+</section>
+<section>
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-8 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Execution Protocol
+                    </h2>
+<div class="space-y-0 relative before:absolute before:left-5 before:top-2 before:bottom-2 before:w-[1px] before:bg-slate-200 dark:before:bg-slate-800">
+<div class="relative pl-14 pb-12 group">
+<div class="absolute left-0 w-10 h-10 rounded-full bg-white dark:bg-background-dark border-2 border-slate-200 dark:border-slate-800 flex items-center justify-center step-number font-extrabold text-sm z-10 group-hover:border-primary transition-colors text-slate-400 group-hover:text-primary">01</div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Creative Development</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-[15px]">Synthesize quarterly campaign themes into high-fidelity copy drafts and visual concepts. Ensure all assets align with the centralized design system tokens.</p>
+</div>
+<div class="relative pl-14 pb-12 group">
+<div class="absolute left-0 w-10 h-10 rounded-full bg-white dark:bg-background-dark border-2 border-slate-200 dark:border-slate-800 flex items-center justify-center step-number font-extrabold text-sm z-10 group-hover:border-primary transition-colors text-slate-400 group-hover:text-primary">02</div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Technical Peer Audit</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-[15px]">Submit work for cross-functional review. Focus on accessibility standards, localization requirements, and platform-specific formatting nuances.</p>
+</div>
+<div class="relative pl-14 pb-12 group">
+<div class="absolute left-0 w-10 h-10 rounded-full bg-white dark:bg-background-dark border-2 border-slate-200 dark:border-slate-800 flex items-center justify-center step-number font-extrabold text-sm z-10 group-hover:border-primary transition-colors text-slate-400 group-hover:text-primary">03</div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Stakeholder Finalization</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-[15px]">Promote assets to 'Awaiting Final Approval' status. Regional Directors must provide sign-off by Thursday 17:00 EST for subsequent week scheduling.</p>
+</div>
+<div class="relative pl-14 group">
+<div class="absolute left-0 w-10 h-10 rounded-full bg-white dark:bg-background-dark border-2 border-slate-200 dark:border-slate-800 flex items-center justify-center step-number font-extrabold text-sm z-10 group-hover:border-primary transition-colors text-slate-400 group-hover:text-primary">04</div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg mb-2">Automated Deployment</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-[15px]">Execute scheduling via Sprout Social using the 'Optimal Send Time' algorithm based on 90-day historical engagement heatmaps.</p>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Compliance Checklist
+                    </h2>
+<div class="bg-white dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800 divide-y divide-slate-100 dark:divide-slate-800">
+<label class="flex items-center gap-4 p-5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer h-6 w-6 rounded-md border-slate-300 dark:border-slate-700 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent transition-all" type="checkbox"/>
+</div>
+<span class="text-[15px] font-medium text-slate-700 dark:text-slate-300">All outbound URIs contain sanitized UTM parameters &amp; brand shortlinks</span>
+</label>
+<label class="flex items-center gap-4 p-5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<div class="relative flex items-center justify-center">
+<input checked="" class="peer h-6 w-6 rounded-md border-slate-300 dark:border-slate-700 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent transition-all" type="checkbox"/>
+</div>
+<span class="text-[15px] font-medium text-slate-700 dark:text-slate-300">Alt-text descriptions satisfy WCAG 2.1 Level AA compliance guidelines</span>
+</label>
+<label class="flex items-center gap-4 p-5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<div class="relative flex items-center justify-center">
+<input class="peer h-6 w-6 rounded-md border-slate-300 dark:border-slate-700 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent transition-all" type="checkbox"/>
+</div>
+<span class="text-[15px] font-medium text-slate-700 dark:text-slate-300">Hashtag saturation levels are optimized (density &lt; 3.0 per post)</span>
+</label>
+</div>
+</section>
+<section class="border-t border-slate-200 dark:border-slate-800 pt-12">
+<h2 class="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary/30"></span> Crisis Protocol
+                    </h2>
+<div class="p-8 bg-slate-900 dark:bg-white text-slate-200 dark:text-slate-900 rounded-2xl relative overflow-hidden shadow-2xl">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary opacity-10 blur-3xl -mr-16 -mt-16"></div>
+<p class="text-lg leading-relaxed font-semibold italic relative z-10">
+                            "In the event of a global macro-economic shift or sensitive social climate change, invoke the 'Immediate Cease' protocol. Pause all queued assets and escalate to the Global Communications Lead via P1 Slack alert."
+                        </p>
+</div>
+</section>
+</div>
+</div>
+<aside class="lg:col-span-4">
+<div class="sticky top-32 space-y-8">
+<div class="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<button class="w-full p-5 flex items-center justify-between text-left group transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<span class="font-bold text-slate-900 dark:text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">history_edu</span> Historical Context
+                        </span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">expand_more</span>
+</button>
+<div class="px-5 pb-5">
+<p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+                            Imported from legacy Q4 Google Governance. Rationalizes the shift from 48h to 72h approval windows to accommodate multi-region regulatory compliance checks.
+                        </p>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 px-1">Managed Assets</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary transition-all group cursor-pointer shadow-sm hover:shadow-md">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-500 text-[20px]">description</span>
+</div>
+<div class="truncate">
+<p class="text-[13px] font-bold truncate text-slate-900 dark:text-white">Brand_Guidelines_v2.4.pdf</p>
+<p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-tighter">PDF • 2.4 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-[20px]">download</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-white dark:bg-slate-900/40 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary transition-all group cursor-pointer shadow-sm hover:shadow-md">
+<div class="flex items-center gap-4 overflow-hidden">
+<div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-500 text-[20px]">image</span>
+</div>
+<div class="truncate">
+<p class="text-[13px] font-bold truncate text-slate-900 dark:text-white">Safe_Zone_Overlays.jpg</p>
+<p class="text-[10px] text-slate-500 uppercase font-extrabold tracking-tighter">JPG • 1.1 MB</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-[20px]">download</span>
+</div>
+</div>
+</div>
+<div class="p-8 bg-primary/5 rounded-2xl border border-primary/20 relative group overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary opacity-5 rounded-full blur-2xl group-hover:opacity-10 transition-opacity"></div>
+<h4 class="font-extrabold text-primary text-sm mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">verified_user</span> Governance Audit
+                    </h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 mb-6 font-medium leading-relaxed">System-wide review scheduled for <span class="text-primary font-bold">Jan 12, 2024</span>. Ensure all regional compliance logs are current.</p>
+<button class="w-full py-3 bg-white dark:bg-slate-900 text-primary border border-primary/20 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition-all duration-300 shadow-sm">
+                        Configure Reminder
+                    </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<div class="fixed bottom-8 right-8 z-[100] flex items-center gap-4 px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-5 duration-500">
+<div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center shrink-0 shadow-lg shadow-green-500/30">
+<span class="material-symbols-outlined text-white text-[18px] font-bold">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-sm">Action Confirmed</span>
+<span class="text-[11px] opacity-70 font-medium">Protocol copied to clipboard</span>
+</div>
+<button class="ml-4 p-1 hover:opacity-50 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</body></html>
