@@ -43,7 +43,7 @@ export async function requestGroqCompletion(messages: GroqMessage[]) {
       body: JSON.stringify({
         model,
         temperature: 0.1,
-        max_completion_tokens: 700,
+        max_completion_tokens: 2000,
         messages,
       }),
       cache: "no-store",

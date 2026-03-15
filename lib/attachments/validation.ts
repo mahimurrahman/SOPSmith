@@ -47,7 +47,7 @@ function validateAttachmentFile(sopId: string, file: File): AttachmentUploadInpu
   }
 
   if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
-    throw createAttachmentRouteError(`${label} exceeds the 5 MB upload limit.`, 400);
+    throw createAttachmentRouteError(`${label} exceeds the 50 MB upload limit.`, 400);
   }
 
   return {

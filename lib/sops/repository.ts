@@ -17,7 +17,7 @@ export async function listUserSops(userId: string, client?: SupabaseClient<Datab
   const supabase = await getClient(client);
   const { data, error } = await supabase
     .from("sops")
-    .select("id,title,created_at,raw_notes")
+    .select("id,title,created_at,content")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
@@ -29,12 +29,12 @@ export async function listUserSops(userId: string, client?: SupabaseClient<Datab
   return ((data ?? []) as Array<{
     created_at: string;
     id: string;
-    raw_notes: string;
+    content: string;
     title: string;
   }>).map((sop) => ({
     created_at: sop.created_at,
     id: sop.id,
-    preview: getTextPreview(sop.raw_notes),
+    preview: getTextPreview(sop.content),
     title: sop.title,
   })) as SopSummary[];
 }
@@ -91,6 +91,12 @@ export async function assertSopsCreateSchema(client?: SupabaseClient<Database>) 
   }
 }
 
+export async function deleteSopRecord(id: string, userId: string, client?: SupabaseClient<Database>) {
+  const supabase = await getClient(client);
+  const { error } = await supabase.from("sops").delete().eq("id", id).eq("user_id", userId);
+  if (error) throw new Error("Unable to delete this SOP right now. Please try again.");
+}
+
 export async function createSopRecord(values: SopInsert, client?: SupabaseClient<Database>) {
   const supabase = await getClient(client);
   const { data, error } = await supabase.from("sops").insert(values).select("id").single();
@@ -101,4 +107,23 @@ export async function createSopRecord(values: SopInsert, client?: SupabaseClient
   }
 
   return data as CreatedSop;
+}
+
+export async function updateSopContent(
+  id: string,
+  content: string,
+  userId: string,
+  client?: SupabaseClient<Database>,
+) {
+  const supabase = await getClient(client);
+  const { error } = await supabase
+    .from("sops")
+    .update({ content })
+    .eq("id", id)
+    .eq("user_id", userId);
+
+  if (error) {
+    logSopsError("update", error, { id, userId });
+    throw new Error("Unable to update this SOP right now. Please try again.");
+  }
 }

@@ -15,17 +15,17 @@ type AppShellProps = {
 
 export function AppShell({ children, className, sidebarFooter, subtitle }: AppShellProps) {
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-background-light dark:bg-background-dark font-sans text-slate-900 dark:text-slate-200">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-background-light dark:bg-background-dark font-sans text-foreground">
       {/* Desktop Sidebar */}
       <AppSidebar footer={sidebarFooter} subtitle={subtitle} />
 
       {/* Mobile Top Navigation */}
-      <div className="lg:hidden flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800/60 bg-white dark:bg-background-dark z-20 sticky top-0">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="bg-primary p-2 rounded-xl flex shadow-lg shadow-primary/20">
+      <div className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border)] bg-background-light dark:bg-background-dark z-20 sticky top-0">
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="bg-primary p-2 rounded-lg flex shadow-md">
             <span className="material-symbols-outlined text-white text-[16px] leading-none">auto_fix_high</span>
           </div>
-          <span className="text-lg font-extrabold tracking-tight font-display text-slate-900 dark:text-white">SOPSmith</span>
+          <span className="text-xl font-bold tracking-tight font-display text-foreground">SOPSmith</span>
         </Link>
         <div className="flex items-center gap-3">
           <ThemeToggle className="scale-[0.85] origin-right" />
@@ -35,7 +35,7 @@ export function AppShell({ children, className, sidebarFooter, subtitle }: AppSh
         </div>
       </div>
 
-      <main className={cn("flex-1 bg-white/40 dark:bg-[#0a0f1a] overflow-y-auto", className)}>
+      <main className={cn("flex-1 bg-background-light dark:bg-background-dark overflow-y-auto", className)}>
         <div className="p-4 sm:p-8 max-w-7xl mx-auto flex flex-col min-h-full relative">
           <div className="mb-6 flex items-center">
             <BackButton />

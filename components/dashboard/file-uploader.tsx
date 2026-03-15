@@ -49,7 +49,7 @@ export function FileUploader({
               disabled && "pointer-events-none opacity-60",
             )}
           >
-            <span className="secondary-button">Add files</span>
+            <span className="secondary-button">Add files (optional)</span>
             <input
               type="file"
               multiple
@@ -65,7 +65,7 @@ export function FileUploader({
         </div>
 
         <div className="muted-panel rounded-[1.35rem] px-4 py-3 text-xs leading-6 text-muted">
-          Supported files: PDF, DOC, DOCX, and TXT up to 5 MB each.
+          Supported files: PDF, DOC, DOCX, and TXT up to 50 MB each.
         </div>
       </div>
 

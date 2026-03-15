@@ -262,8 +262,11 @@ export function CreateSopForm() {
   const hasPendingUploads = files.some((file) => file.status !== "success");
   const failedUploads = files.filter((file) => file.status === "error");
 
+  const hasFiles = files.length > 0;
+  
   return (
     <form action={formAction} className="space-y-7" aria-label="Create SOP form">
+      <input type="hidden" name="hasFiles" value={hasFiles ? "true" : "false"} />
       <CreateSopFormFields
         createdSopId={createdSopId}
         failedUploadsCount={failedUploads.length}
@@ -287,6 +290,7 @@ export function CreateSopForm() {
         }}
         state={state}
         uploadStatusMessage={uploadStatusMessage}
+        hasFiles={hasFiles}
       />
     </form>
   );
@@ -304,6 +308,7 @@ type CreateSopFormFieldsProps = {
   onViewSop: () => void;
   state: CreateSopActionState;
   uploadStatusMessage: string;
+  hasFiles: boolean;
 };
 
 function CreateSopFormFields({
@@ -318,6 +323,7 @@ function CreateSopFormFields({
   onViewSop,
   state,
   uploadStatusMessage,
+  hasFiles,
 }: CreateSopFormFieldsProps) {
   const { pending } = useFormStatus();
   const values = state.values ?? {
@@ -374,16 +380,23 @@ function CreateSopFormFields({
           <span className="text-[10px] text-slate-500 dark:text-slate-600 font-mono">SUPPORT REQUIRED</span>
         </div>
         <Textarea
+          required={!hasFiles}
           name="rawNotes"
           defaultValue={values.rawNotes}
+          minLength={hasFiles ? undefined : 20}
           maxLength={6000}
           rows={12}
           placeholder="Input workflow fragments, meeting transcripts, or rough instructional steps..."
           className={cn("w-full glass-input px-5 py-4 rounded-xl bg-white/50 dark:bg-transparent text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-700 resize-y font-sans leading-relaxed", state.fieldErrors?.rawNotes && "border-rose-400 focus:border-rose-400 focus:shadow-none")}
           aria-invalid={Boolean(state.fieldErrors?.rawNotes)}
           aria-describedby={state.fieldErrors?.rawNotes ? "raw-notes-error" : "raw-notes-help"}
+          aria-required="true"
           onInput={clearCustomValidity}
-          onInvalid={setRawNotesValidationMessage}
+          onInvalid={(e) => {
+            if (!hasFiles) {
+              setRawNotesValidationMessage(e);
+            }
+          }}
         />
         {state.fieldErrors?.rawNotes ? (
           <p id="raw-notes-error" className="text-sm text-rose-500 dark:text-rose-400" role="alert">
@@ -507,7 +520,7 @@ function GenerateSopButton() {
         disabled={pending}
         className="w-full py-5 bg-primary hover:bg-primary/90 text-white rounded-xl font-extrabold text-[15px] tracking-wide shadow-[0_20px_40px_-15px_rgba(60,131,246,0.3)] transition-all active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none uppercase"
       >
-        {pending ? <PendingGenerationStage /> : "Generate Formalized Procedure"}
+        {pending ? <PendingGenerationStage /> : "Generate SOP"}
       </button>
     </div>
   );
@@ -624,7 +637,11 @@ function setTitleValidationMessage(event: FormEvent<HTMLInputElement>) {
 function setRawNotesValidationMessage(event: FormEvent<HTMLTextAreaElement>) {
   const textarea = event.currentTarget;
 
-  if (textarea.validity.tooLong) {
+  if (textarea.validity.valueMissing) {
+    textarea.setCustomValidity("Add some rough notes before generating an SOP.");
+  } else if (textarea.validity.tooShort) {
+    textarea.setCustomValidity("Add at least a few notes for SOPSmith to work from.");
+  } else if (textarea.validity.tooLong) {
     textarea.setCustomValidity("Keep the rough notes under 6,000 characters.");
   } else {
     textarea.setCustomValidity("");

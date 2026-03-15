@@ -2,7 +2,7 @@ import type { AllowedAttachmentMimeType } from "./types";
 
 export const ATTACHMENTS_BUCKET = "attachments";
 export const ATTACHMENT_SIGNED_URL_TTL_SECONDS = 60;
-export const MAX_ATTACHMENT_SIZE_BYTES = 5 * 1024 * 1024;
+export const MAX_ATTACHMENT_SIZE_BYTES = 50 * 1024 * 1024;
 export const ATTACHMENTS_ACCEPT = ".pdf,.doc,.docx,.txt";
 
 export const MIME_TO_EXTENSION: Record<AllowedAttachmentMimeType, string> = {

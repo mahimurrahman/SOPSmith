@@ -52,7 +52,7 @@ Bucket name: `attachments`
 Configuration:
 
 - private bucket
-- file size limit: `5 MB`
+- file size limit: `50 MB`
 - allowed MIME types:
   - `application/pdf`
   - `application/msword`

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import { Cormorant_Garamond, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -11,8 +11,10 @@ const sansFont = Plus_Jakarta_Sans({
   variable: "--font-sans",
 });
 
-const displayFont = Outfit({
+const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
   variable: "--font-display",
 });
 
@@ -52,7 +54,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#091018",
+  themeColor: "#09090A",
 };
 
 export default function RootLayout({
@@ -67,7 +69,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${sansFont.variable} ${displayFont.variable} ${monoFont.variable} bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden`}
+        className={`${sansFont.variable} ${displayFont.variable} ${monoFont.variable} antialiased overflow-x-hidden`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ToastProvider>{children}</ToastProvider>

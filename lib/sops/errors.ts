@@ -7,7 +7,7 @@ type SupabaseErrorLike = {
   message?: string;
 };
 
-export type SopsAction = "list" | "detail" | "create" | "schema";
+export type SopsAction = "list" | "detail" | "create" | "schema" | "update" | "delete";
 export type CreateSopStage = "auth" | "schema" | "generate" | "save";
 
 export function getSchemaRepairMessage() {

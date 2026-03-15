@@ -18,9 +18,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
   if (!mounted) {
     return (
-      <button className={cn("inline-flex min-h-11 items-center gap-3 rounded-full border border-border bg-surface-muted px-4 py-2 opacity-50 cursor-pointer", className)}>
-        <span aria-hidden="true" className="inline-flex h-2.5 w-2.5 rounded-full bg-slate-500" />
-        <span>Loading...</span>
+      <button className={cn("inline-flex min-h-[42px] items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 opacity-50 cursor-pointer", className)}>
+        <span aria-hidden="true" className="inline-flex h-2.5 w-2.5 rounded-full bg-[var(--muted)]" />
+        <span className="text-sm font-semibold">Loading...</span>
       </button>
     );
   }
@@ -30,7 +30,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       type="button"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className={cn(
-        "inline-flex min-h-11 items-center gap-3 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 px-5 py-2 text-sm font-bold text-slate-900 dark:text-white transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md cursor-pointer",
+        "inline-flex min-h-[42px] items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-semibold text-foreground transition-all duration-150 hover:bg-[var(--surface-muted)] cursor-pointer",
         className,
       )}
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} theme`}
@@ -40,11 +40,11 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       <span
         aria-hidden="true"
         className={cn(
-          "inline-flex h-3 w-3 rounded-full shadow-inner",
-          resolvedTheme === "light" ? "bg-amber-400" : "bg-primary shadow-primary/40",
+          "inline-flex h-2.5 w-2.5 rounded-full",
+          resolvedTheme === "light" ? "bg-amber-500" : "bg-primary"
         )}
       />
-      <span>{resolvedTheme === "dark" ? "Dark Mode" : "Light Mode"}</span>
+      <span>{resolvedTheme === "dark" ? "Light Theme" : "Dark Theme"}</span>
     </button>
   );
 }
