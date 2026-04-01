@@ -67,7 +67,7 @@ That focus makes it a good example of a solo-founder-friendly AI workflow produc
 
 ### Frontend
 
-- App Router pages and layouts in [`app/`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/app)
+- App Router pages and layouts in [`app/`](app)
 - Tailwind-based dark UI
 - Mostly server components, with small client components only where interactivity is needed
 - Server actions used for internal writes like magic link requests, SOP creation, and sign-out
@@ -75,25 +75,25 @@ That focus makes it a good example of a solo-founder-friendly AI workflow produc
 ### Auth
 
 - Supabase SSR client setup for:
-  - browser usage in [`lib/supabase/browser.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/browser.ts)
-  - server usage in [`lib/supabase/server.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/server.ts)
-  - session refresh and route protection in [`lib/supabase/proxy.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/proxy.ts)
-- Root-level [`proxy.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/proxy.ts) protects dashboard routes before rendering
+  - browser usage in [`lib/supabase/browser.ts`](lib/supabase/browser.ts)
+  - server usage in [`lib/supabase/server.ts`](lib/supabase/server.ts)
+  - session refresh and route protection in [`lib/supabase/proxy.ts`](lib/supabase/proxy.ts)
+- Root-level [`proxy.ts`](proxy.ts) protects dashboard routes before rendering
 - Server-side user checks still run inside protected pages and layouts for defense in depth
 
 ### AI Generation
 
-- Prompt definitions live in [`lib/groq/prompts.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/prompts.ts)
-- Groq API client lives in [`lib/groq/client.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/client.ts)
-- Validation and normalization live in [`lib/groq/validation.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/validation.ts)
-- The orchestration layer lives in [`lib/groq/index.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/index.ts)
+- Prompt definitions live in [`lib/groq/prompts.ts`](lib/groq/prompts.ts)
+- Groq API client lives in [`lib/groq/client.ts`](lib/groq/client.ts)
+- Validation and normalization live in [`lib/groq/validation.ts`](lib/groq/validation.ts)
+- The orchestration layer lives in [`lib/groq/index.ts`](lib/groq/index.ts)
 
 ### Data Layer
 
-- SOP queries and mutations are centralized in [`lib/sops/repository.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/sops/repository.ts)
-- Validation schemas are centralized in [`lib/validation/schemas.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/validation/schemas.ts)
-- Shared runtime env access is centralized in [`lib/config/env.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/config/env.ts)
-- Shared error shaping is centralized in [`lib/errors.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/errors.ts)
+- SOP queries and mutations are centralized in [`lib/sops/repository.ts`](lib/sops/repository.ts)
+- Validation schemas are centralized in [`lib/validation/schemas.ts`](lib/validation/schemas.ts)
+- Shared runtime env access is centralized in [`lib/config/env.ts`](lib/config/env.ts)
+- Shared error shaping is centralized in [`lib/errors.ts`](lib/errors.ts)
 
 ## Auth Flow
 
@@ -159,7 +159,7 @@ Also included:
 - row level security
 - policies limiting reads and writes to `auth.uid() = user_id`
 
-Migration files live in [`supabase/migrations/`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/supabase/migrations).
+Migration files live in [`supabase/migrations/`](supabase/migrations).
 
 ## Key Technical Decisions
 
@@ -253,7 +253,7 @@ Create `.env.local` from `.env.example`.
    - Redirect URL: `http://localhost:3000/auth/callback`
 5. Apply the SQL migrations in timestamp order
 6. If the table already existed in an older shape, also run the repair migration:
-   - [`supabase/migrations/20260314193000_repair_sops_schema.sql`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/supabase/migrations/20260314193000_repair_sops_schema.sql)
+   - [`supabase/migrations/20260314193000_repair_sops_schema.sql`](supabase/migrations/20260314193000_repair_sops_schema.sql)
 
 ### 4. Configure Google OAuth
 
