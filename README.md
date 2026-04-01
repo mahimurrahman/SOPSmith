@@ -1,99 +1,134 @@
 # SOPSmith
 
-SOPSmith is a focused AI SaaS that turns rough operational notes into clean, structured Standard Operating Procedures.
+> **Turn rough operational notes into clean, structured SOPs — in seconds.**
 
-It is built for solo founders, operators, agencies, and small teams that need usable SOPs fast without setting up a heavy documentation system.
+SOPSmith is a focused AI SaaS that converts messy process notes, bullets, and handoff comments into professional Standard Operating Procedures. Built for speed, simplicity, and reliability.
 
-## What The Product Does
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mahimurrahman/SOPSmith)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-SOPSmith takes messy source notes like bullets, handoff comments, half-written steps, and process reminders, then turns them into a practical SOP with a consistent structure:
+---
 
-- `# Title`
-- `## Purpose`
-- `## Scope`
-- `## Tools Needed`
-- `## Inputs`
-- `## Steps`
-- `## Quality Checks`
-- `## Checklist`
-- `## Notes`
+## ✨ What SOPSmith Does
 
-Each generated SOP is saved to a private library for the signed-in user, can be reopened later, and can be copied anywhere the team already works.
+Paste your rough notes. Get a polished SOP with every section your team needs:
 
-## Who It Is For
+| Section | Purpose |
+|---|---|
+| `# Title` | Clear, searchable SOP name |
+| `## Purpose` | Why this procedure exists |
+| `## Scope` | What it covers and who follows it |
+| `## Tools Needed` | Software, hardware, resources required |
+| `## Inputs` | What must be ready before starting |
+| `## Steps` | Numbered, actionable instructions |
+| `## Quality Checks` | How to verify work is done correctly |
+| `## Checklist` | Quick-reference checkboxes |
+| `## Notes` | Edge cases, exceptions, and context |
 
-- Solo founders documenting repeatable workflows
-- Operators building process clarity without a big ops stack
-- Agencies standardizing internal handoffs and delivery steps
-- Small teams that need a lightweight SOP workflow instead of a complex knowledge base
+Each generated SOP is saved to your private library — reopenable, copyable, downloadable as TXT or PDF.
 
-## Core MVP Scope
+---
 
-- Landing page
-- Email magic link login
-- Google OAuth login
-- Supabase auth callback flow
-- Protected SOP library
-- Guided new SOP form
-- Groq-powered SOP generation
-- Supabase persistence under row level security
-- SOP detail view with copy-to-clipboard
-- Loading, error, empty, and not-found states
+## 🎯 Who It Is For
 
-The product intentionally does not include billing, teams, collaboration, templates marketplace, analytics dashboards, admin panels, or PDF export.
+- **Solo founders** documenting repeatable workflows before hiring
+- **Operators** building process clarity without a heavy docs stack
+- **Agencies** standardising internal handoffs and delivery steps
+- **Small teams** that need SOPs fast, not a complex knowledge base
 
-## Tech Stack
+---
 
-- Next.js 16 App Router
-- TypeScript
-- Tailwind CSS v4
-- Supabase SSR auth
-- Supabase Postgres with RLS
-- Groq chat completions API
-- Zod for validation
+## 🚀 Features
 
-## Product Story
+- **⚡ Instant generation** — Groq-powered LLM produces structured SOPs in ~2 seconds
+- **🔒 Private library** — every SOP saved under your account with row-level security
+- **📎 File attachments** — attach PDF, DOC, DOCX, TXT reference files to any SOP
+- **📋 Multi-format copy** — copy as Markdown, Notion-ready, or plain text
+- **⬇️ Export** — download as TXT or open a print-ready PDF
+- **🔄 Regenerate** — re-run generation from the original notes at any time
+- **🔍 Search** — instantly filter your library by title
+- **🌗 Dark / light mode** — system-aware with manual toggle
+- **⌨️ Keyboard shortcuts** — `Cmd+Enter` to generate
+- **♿ Accessible** — ARIA roles, keyboard navigation, focus states throughout
+- **🛡️ Robust validation** — Zod schemas + auto-repair pass for AI output
+- **📱 Responsive** — mobile-first layout, works on all screen sizes
 
-SOPSmith is intentionally narrow:
+---
 
-1. Start with rough notes.
-2. Generate a structured SOP.
-3. Save it to a private library.
-4. Reopen and copy it when needed.
+## 🏗️ Tech Stack
 
-That focus makes it a good example of a solo-founder-friendly AI workflow product: one painful job, one clear output, and one reliable storage/retrieval loop.
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 App Router |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Auth | Supabase SSR (magic link + Google OAuth) |
+| Database | Supabase Postgres with RLS |
+| Storage | Supabase Storage |
+| AI | Groq chat completions API |
+| Validation | Zod v4 |
 
-## Architecture Overview
+---
+
+## 🗂️ Project Structure
+
+```text
+app/
+  api/sops/          # REST endpoints for attachments
+  auth/callback/     # OAuth callback handler
+  dashboard/         # Protected library, new SOP form, detail view
+  login/             # Magic link + Google OAuth login page
+components/
+  auth/              # LoginForm
+  dashboard/         # CopyButton, CreateSopForm, DownloadButtons, …
+  layout/            # AppShell, AppSidebar, SiteHeader, …
+  ui/                # Button, Card, Toast, ThemeToggle, …
+lib/
+  auth/              # Session helpers, magic link, callback
+  config/            # Zod-validated runtime environment
+  groq/              # Prompts, client (with retry/backoff), validation
+  sops/              # Repository, types, error messages
+  attachments/       # Storage helpers, validation, types
+  supabase/          # Browser + server Supabase clients, proxy
+  validation/        # Shared Zod schemas
+supabase/
+  migrations/        # SQL migration files
+docs/                # Setup guide, architecture overview
+```
+
+---
+
+## 🏛️ Architecture Overview
 
 ### Frontend
 
-- App Router pages and layouts in [`app/`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/app)
-- Tailwind-based dark UI
-- Mostly server components, with small client components only where interactivity is needed
-- Server actions used for internal writes like magic link requests, SOP creation, and sign-out
+- App Router pages and layouts in [`app/`](./app)
+- Tailwind-based UI with light/dark mode (CSS custom properties)
+- Mostly server components; client components only where interactivity is needed
+- Server actions for writes: magic link, SOP creation, sign-out
 
 ### Auth
 
 - Supabase SSR client setup for:
-  - browser usage in [`lib/supabase/browser.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/browser.ts)
-  - server usage in [`lib/supabase/server.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/server.ts)
-  - session refresh and route protection in [`lib/supabase/proxy.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/supabase/proxy.ts)
-- Root-level [`proxy.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/proxy.ts) protects dashboard routes before rendering
-- Server-side user checks still run inside protected pages and layouts for defense in depth
+  - browser usage in [`lib/supabase/browser.ts`](./lib/supabase/browser.ts)
+  - server usage in [`lib/supabase/server.ts`](./lib/supabase/server.ts)
+  - session refresh and route protection in [`lib/supabase/proxy.ts`](./lib/supabase/proxy.ts)
+- Root-level [`proxy.ts`](./proxy.ts) protects dashboard routes before rendering
+- Server-side user checks still run inside protected pages and layouts for defence in depth
 
 ### AI Generation
 
-- Prompt definitions live in [`lib/groq/prompts.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/prompts.ts)
-- Groq API client lives in [`lib/groq/client.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/client.ts)
-- Validation and normalization live in [`lib/groq/validation.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/validation.ts)
-- The orchestration layer lives in [`lib/groq/index.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/groq/index.ts)
+- Prompt definitions live in [`lib/groq/prompts.ts`](./lib/groq/prompts.ts)
+- Groq API client (with exponential-backoff retry) lives in [`lib/groq/client.ts`](./lib/groq/client.ts)
+- Validation and normalisation live in [`lib/groq/validation.ts`](./lib/groq/validation.ts)
+- The orchestration layer (generation + auto-repair + caching) lives in [`lib/groq/index.ts`](./lib/groq/index.ts)
 
 ### Data Layer
 
-- SOP queries and mutations are centralized in [`lib/sops/repository.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/sops/repository.ts)
-- Validation schemas are centralized in [`lib/validation/schemas.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/validation/schemas.ts)
-- Shared runtime env access is centralized in [`lib/config/env.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/config/env.ts)
-- Shared error shaping is centralized in [`lib/errors.ts`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/lib/errors.ts)
+- SOP queries and mutations are centralised in [`lib/sops/repository.ts`](./lib/sops/repository.ts)
+- Validation schemas are centralised in [`lib/validation/schemas.ts`](./lib/validation/schemas.ts)
+- Shared runtime env access is centralised in [`lib/config/env.ts`](./lib/config/env.ts)
+- Shared error shaping is centralised in [`lib/errors.ts`](./lib/errors.ts)
 
 ## Auth Flow
 
@@ -159,7 +194,7 @@ Also included:
 - row level security
 - policies limiting reads and writes to `auth.uid() = user_id`
 
-Migration files live in [`supabase/migrations/`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/supabase/migrations).
+Migration files live in [`supabase/migrations/`](./supabase/migrations).
 
 ## Key Technical Decisions
 
@@ -253,7 +288,7 @@ Create `.env.local` from `.env.example`.
    - Redirect URL: `http://localhost:3000/auth/callback`
 5. Apply the SQL migrations in timestamp order
 6. If the table already existed in an older shape, also run the repair migration:
-   - [`supabase/migrations/20260314193000_repair_sops_schema.sql`](/D:/DNT++REAL+PROJECT/SOPSmith/sopsmith/supabase/migrations/20260314193000_repair_sops_schema.sql)
+   - [`supabase/migrations/20260314193000_repair_sops_schema.sql`](./supabase/migrations/20260314193000_repair_sops_schema.sql)
 
 ### 4. Configure Google OAuth
 
@@ -324,22 +359,26 @@ npm run build
 4. Sign in with Google if enabled
 5. Open `/dashboard`
 6. Create a new SOP
-7. Confirm the app redirects to the detail page
+7. Confirm the app redirects to the detail page with a confetti animation
 8. Confirm the SOP appears in the library
-9. Confirm copy-to-clipboard works
-10. Confirm a fake SOP URL shows not-found
-11. Confirm signed-out users cannot access protected routes
+9. Confirm multi-format copy-to-clipboard works (Markdown, Plain Text, Notion)
+10. Confirm TXT download and PDF print work
+11. Confirm `Cmd+Enter` on the new SOP form submits the generation
+12. Confirm a fake SOP URL shows not-found
+13. Confirm signed-out users cannot access protected routes
 
-## Why This Works Well As A Portfolio Project
+---
 
-SOPSmith shows a credible real-world AI SaaS without pretending to be bigger than it is. It demonstrates:
+## Documentation
 
-- App Router architecture
-- SSR auth with Supabase
-- protected routes and callback handling
-- prompt engineering plus output validation
-- AI generation as part of a real CRUD workflow
-- RLS-based multi-user data isolation
-- clean MVP scoping instead of feature bloat
+| Document | Purpose |
+|---|---|
+| [docs/setup-guide.md](./docs/setup-guide.md) | Full local and production setup walkthrough |
+| [docs/contributing.md](./docs/contributing.md) | Code style, commit conventions, PR checklist |
+| [CHANGELOG.md](./CHANGELOG.md) | Version history and change log |
 
-It is a strong example of shipping a practical AI workflow product with thoughtful technical tradeoffs.
+---
+
+## License
+
+[MIT](./LICENSE) © SOPSmith

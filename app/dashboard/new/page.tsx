@@ -25,8 +25,8 @@ export default function NewSopPage() {
               <li className="flex gap-4">
                 <span className="material-symbols-outlined text-primary text-[18px] mt-0.5">edit_note</span>
                 <div>
-                  <p className="text-[15px] font-semibold">Write how you'd explain it</p>
-                  <p className="text-sm text-muted leading-relaxed mt-1">Imagine you're walking a teammate through the process for the first time.</p>
+                  <p className="text-[15px] font-semibold">Write how you&apos;d explain it</p>
+                  <p className="text-sm text-muted leading-relaxed mt-1">Imagine you&apos;re walking a teammate through the process for the first time.</p>
                 </div>
               </li>
               <li className="flex gap-4">
@@ -48,7 +48,7 @@ export default function NewSopPage() {
 
           <div className="p-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
             <span className="mono-label text-primary mb-2 block">Quick tip</span>
-            <p className="text-sm text-muted leading-relaxed italic">"Start with the workflow you explain most often. Rough bullets are fine — SOPSmith will structure them."</p>
+            <p className="text-sm text-muted leading-relaxed italic">&ldquo;Start with the workflow you explain most often. Rough bullets are fine — SOPSmith will structure them.&rdquo;</p>
           </div>
         </aside>
 

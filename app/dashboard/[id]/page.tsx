@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AttachmentsSection } from "@/components/dashboard/attachments-section";
+import { ConfettiCelebration } from "@/components/dashboard/confetti-celebration";
 import { CopyButton } from "@/components/dashboard/copy-button";
 import { DeleteSopButton } from "@/components/dashboard/delete-sop-button";
 import { DownloadButtons } from "@/components/dashboard/download-buttons";
@@ -19,6 +19,7 @@ type SopDetailPageProps = {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{ created?: string }>;
 };
 
 export const metadata: Metadata = {
@@ -26,8 +27,9 @@ export const metadata: Metadata = {
   description: "Read and copy a saved SOP.",
 };
 
-export default async function SopDetailPage({ params }: SopDetailPageProps) {
+export default async function SopDetailPage({ params, searchParams }: SopDetailPageProps) {
   const { id } = await params;
+  const { created } = await searchParams;
 
   if (!uuidSchema.safeParse(id).success) {
     notFound();
@@ -43,7 +45,8 @@ export default async function SopDetailPage({ params }: SopDetailPageProps) {
   const attachments = (await listSopFiles(sop.id, supabase)).map(toSopFileSummary);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {created === "1" && <ConfettiCelebration />}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 lg:gap-16">
         <div className="lg:col-span-8">
           <header className="mb-12">

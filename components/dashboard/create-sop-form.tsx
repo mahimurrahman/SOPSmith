@@ -5,7 +5,6 @@ import type { FormEvent } from "react";
 import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-
 import { createSopAction } from "@/app/dashboard/actions";
 import {
   MAX_ATTACHMENT_SIZE_BYTES,
@@ -45,17 +44,6 @@ const generationStages = [
   "Saving to library...",
 ] as const;
 
-const messyNotesExample = `kickoff when sales marks deal closed
-owner usually ops lead, delivery manager takes over after setup
-need signed agreement, main client contact, shared drive folder, crm record
-tools: hubspot, notion, slack, drive
-start by checking contract + scope, if missing docs ask sales before moving
-create project space + client folder, name it correctly
-send intro email + kickoff options, cc delivery owner
-output = ready-for-kickoff workspace with owner assigned and client contacted
-quality check: right client name, links work, owner assigned, kickoff message sent
-if client contact missing or scope unclear, pause and escalate internally`;
-
 type UploadQueueItem = FileUploadItemView & {
   file: File;
 };
@@ -71,11 +59,24 @@ export function CreateSopForm() {
     "Optional files will upload after the SOP draft is saved.",
   );
   const handledSopIdRef = useRef<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Keyboard shortcut: Cmd+Enter or Ctrl+Enter submits the form
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        formRef.current?.requestSubmit();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const runUploadFlow = useCallback(
     async (sopId: string, queuedFiles: UploadQueueItem[]) => {
       if (queuedFiles.length === 0) {
-        router.push(`/dashboard/${sopId}`);
+        router.push(`/dashboard/${sopId}?created=1`);
         return;
       }
 
@@ -167,7 +168,7 @@ export function CreateSopForm() {
         description: "The SOP and all selected attachments are ready.",
         tone: "success",
       });
-      router.push(`/dashboard/${sopId}`);
+      router.push(`/dashboard/${sopId}?created=1`);
     },
     [pushToast, router],
   );
@@ -193,7 +194,7 @@ export function CreateSopForm() {
         description: "Your SOP is ready in the library.",
         tone: "success",
       });
-      router.push(`/dashboard/${state.sopId}`);
+      router.push(`/dashboard/${state.sopId}?created=1`);
       return;
     }
 
@@ -265,7 +266,7 @@ export function CreateSopForm() {
   const hasFiles = files.length > 0;
   
   return (
-    <form action={formAction} className="space-y-7" aria-label="Create SOP form">
+    <form ref={formRef} action={formAction} className="space-y-7" aria-label="Create SOP form">
       <input type="hidden" name="hasFiles" value={hasFiles ? "true" : "false"} />
       <CreateSopFormFields
         createdSopId={createdSopId}
@@ -285,7 +286,7 @@ export function CreateSopForm() {
         onSelectFiles={handleSelectFiles}
         onViewSop={() => {
           if (createdSopId) {
-            router.push(`/dashboard/${createdSopId}`);
+            router.push(`/dashboard/${createdSopId}?created=1`);
           }
         }}
         state={state}

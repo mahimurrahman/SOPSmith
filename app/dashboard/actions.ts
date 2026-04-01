@@ -16,7 +16,6 @@ import {
 } from "@/lib/sops";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { CreateSopActionState, CreateSopInput } from "@/lib/types";
-import { createSopSchema } from "@/lib/validators";
 
 import { z } from "zod";
 
