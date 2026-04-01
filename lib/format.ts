@@ -1,19 +1,27 @@
-export function formatDate(date: string) {
+export function formatDate(date: string, fallback = "Unknown date") {
+  const parsed = new Date(date);
+  if (isNaN(parsed.getTime())) {
+    return fallback;
+  }
   return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "short",
     year: "numeric",
-  }).format(new Date(date));
+  }).format(parsed);
 }
 
-export function formatDateTime(date: string) {
+export function formatDateTime(date: string, fallback = "Unknown time") {
+  const parsed = new Date(date);
+  if (isNaN(parsed.getTime())) {
+    return fallback;
+  }
   return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
     month: "short",
     year: "numeric",
-  }).format(new Date(date));
+  }).format(parsed);
 }
 
 export function getTextPreview(text: string, maxLength = 130) {

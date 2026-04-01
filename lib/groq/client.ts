@@ -57,7 +57,12 @@ export async function requestGroqCompletion(messages: GroqMessage[]) {
 
   try {
     payload = (await response.json()) as GroqResponse;
-  } catch {
+  } catch (parseError) {
+    console.error("[groq:requestGroqCompletion]", {
+      message: "Failed to parse Groq response as JSON",
+      parseError: parseError instanceof Error ? parseError.message : String(parseError),
+      status: response.status,
+    });
     payload = null;
   }
 

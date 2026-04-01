@@ -426,7 +426,7 @@ function CreateSopFormFields({
         </Card>
       ) : null}
 
-      <div className="sr-only" aria-live="polite">
+      <div className="sr-only" aria-live="polite" aria-atomic="true" role="status">
         {clientStatusMessage}
       </div>
 
@@ -518,6 +518,8 @@ function GenerateSopButton() {
       <button
         type="submit"
         disabled={pending}
+        aria-label={pending ? "Generating SOP, please wait" : "Generate SOP"}
+        aria-busy={pending}
         className="w-full py-5 bg-primary hover:bg-primary/90 text-white rounded-xl font-extrabold text-[15px] tracking-wide shadow-[0_20px_40px_-15px_rgba(60,131,246,0.3)] transition-all active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none uppercase"
       >
         {pending ? <PendingGenerationStage /> : "Generate SOP"}
@@ -719,6 +721,7 @@ function uploadSingleAttachment(
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `/api/sops/${sopId}/attachments`);
     xhr.responseType = "json";
+    xhr.timeout = 60000;
 
     xhr.upload.addEventListener("progress", (event) => {
       if (!event.lengthComputable) {
@@ -740,6 +743,10 @@ function uploadSingleAttachment(
 
     xhr.addEventListener("error", () => {
       reject(new Error("Network error while uploading the selected file."));
+    });
+
+    xhr.addEventListener("timeout", () => {
+      reject(new Error("The file upload timed out. Please check your connection and try again."));
     });
 
     const formData = new FormData();

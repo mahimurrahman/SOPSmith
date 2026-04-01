@@ -45,6 +45,8 @@ function getSectionBody(content: string, heading: (typeof REQUIRED_SECTIONS)[num
 
 export function validateAndNormalizeContent(title: string, content: string): ValidationResult {
   const cleaned = content.replace(/\r\n/g, "\n").trim();
+  // Strip newlines and extra whitespace from the title so it cannot break the markdown heading.
+  const safeTitle = title.replace(/[\r\n]+/g, " ").trim();
 
   if (cleaned.includes("```")) {
     return {
@@ -67,9 +69,9 @@ export function validateAndNormalizeContent(title: string, content: string): Val
     };
   }
 
-  const normalized = cleaned.replace(/^# .*/m, `# ${title}`);
+  const normalized = cleaned.replace(/^# .*/m, `# ${safeTitle}`);
   const lines = normalized.split("\n");
-  const titleHeading = `# ${title}`;
+  const titleHeading = `# ${safeTitle}`;
   const allowedHeadings = [titleHeading, ...REQUIRED_SECTIONS];
 
   lines[0] = titleHeading;

@@ -94,7 +94,19 @@ export async function uploadAttachmentObject(
   client?: SupabaseClient<Database>,
 ) {
   const supabase = await getClient(client);
-  const body = new Uint8Array(await file.arrayBuffer());
+
+  let body: Uint8Array;
+  try {
+    body = new Uint8Array(await file.arrayBuffer());
+  } catch (readError) {
+    return createStorageError(
+      "upload",
+      readError instanceof Error
+        ? new Error(`Could not read file "${file.name}": ${readError.message}`)
+        : new Error(`Could not read file "${file.name}".`),
+    );
+  }
+
   const { error } = await supabase.storage.from(ATTACHMENTS_BUCKET).upload(storagePath, body, {
     contentType: fileType,
     upsert: false,

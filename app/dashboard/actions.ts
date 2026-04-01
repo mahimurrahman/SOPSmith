@@ -95,6 +95,7 @@ export async function createSopAction(
   } catch (error) {
     console.error("[createSopAction]", {
       message: error instanceof Error ? error.message : "Unknown create SOP error",
+      stage,
       userId: user.id,
     });
 
