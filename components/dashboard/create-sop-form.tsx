@@ -45,17 +45,6 @@ const generationStages = [
   "Saving to library...",
 ] as const;
 
-const messyNotesExample = `kickoff when sales marks deal closed
-owner usually ops lead, delivery manager takes over after setup
-need signed agreement, main client contact, shared drive folder, crm record
-tools: hubspot, notion, slack, drive
-start by checking contract + scope, if missing docs ask sales before moving
-create project space + client folder, name it correctly
-send intro email + kickoff options, cc delivery owner
-output = ready-for-kickoff workspace with owner assigned and client contacted
-quality check: right client name, links work, owner assigned, kickoff message sent
-if client contact missing or scope unclear, pause and escalate internally`;
-
 type UploadQueueItem = FileUploadItemView & {
   file: File;
 };

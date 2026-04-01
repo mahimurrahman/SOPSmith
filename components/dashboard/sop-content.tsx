@@ -247,17 +247,16 @@ function FallbackSection({ body }: { body: string }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mt-4 mb-6 space-y-2 marker:text-primary" {...props} />,
-          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mt-4 mb-6 space-y-2 marker:text-primary font-medium" {...props} />,
-          li: ({ node, ...props }) => <li className="pl-1.5 text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed" {...props} />,
-          p: ({ node, ...props }) => <p className="mb-5 text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed" {...props} />,
-          h3: ({ node, ...props }) => <h3 className="text-lg font-bold mt-8 mb-4 text-slate-900 dark:text-white font-display tracking-tight" {...props} />,
-          h4: ({ node, ...props }) => <h4 className="text-base font-bold mt-6 mb-3 text-slate-900 dark:text-white font-display" {...props} />,
-          strong: ({ node, ...props }) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
-          a: ({ node, ...props }) => <a className="text-primary hover:underline font-medium hover:text-primary/80 transition-colors cursor-pointer" {...props} />,
-          blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-primary/40 bg-primary/5 pl-5 pr-4 py-3 my-6 rounded-r-xl italic text-slate-700 dark:text-slate-300" {...props} />,
-          code(props: any) {
-            const { children, className, node, ...rest } = props;
+          ul: ({ ...props }) => <ul className="list-disc pl-5 mt-4 mb-6 space-y-2 marker:text-primary" {...props} />,
+          ol: ({ ...props }) => <ol className="list-decimal pl-5 mt-4 mb-6 space-y-2 marker:text-primary font-medium" {...props} />,
+          li: ({ ...props }) => <li className="pl-1.5 text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed" {...props} />,
+          p: ({ ...props }) => <p className="mb-5 text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed" {...props} />,
+          h3: ({ ...props }) => <h3 className="text-lg font-bold mt-8 mb-4 text-slate-900 dark:text-white font-display tracking-tight" {...props} />,
+          h4: ({ ...props }) => <h4 className="text-base font-bold mt-6 mb-3 text-slate-900 dark:text-white font-display" {...props} />,
+          strong: ({ ...props }) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+          a: ({ ...props }) => <a className="text-primary hover:underline font-medium hover:text-primary/80 transition-colors cursor-pointer" {...props} />,
+          blockquote: ({ ...props }) => <blockquote className="border-l-4 border-primary/40 bg-primary/5 pl-5 pr-4 py-3 my-6 rounded-r-xl italic text-slate-700 dark:text-slate-300" {...props} />,
+          code({ children, className, ...rest }) {
             const match = /language-(\w+)/.exec(className || '');
             const isInline = !match && !className;
             return isInline ? (

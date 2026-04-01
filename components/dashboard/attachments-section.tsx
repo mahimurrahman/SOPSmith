@@ -7,8 +7,6 @@ import { sanitizeAttachmentFileName } from "@/lib/attachments/shared";
 import { formatDate, formatFileSize } from "@/lib/format";
 
 import { useToast } from "../ui/toast-provider";
-import { Card } from "../ui/Card";
-import { FileTypeIcon } from "../ui/FileTypeIcon";
 
 type AttachmentsSectionProps = {
   attachments: SopFileSummary[];

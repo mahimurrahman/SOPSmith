@@ -3,11 +3,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/components/auth/login-form";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { Card } from "@/components/ui/Card";
-import { Container } from "@/components/ui/Container";
-import { Grid } from "@/components/ui/Grid";
 import { BackButton } from "@/components/ui/BackButton";
 import { getOptionalUser } from "@/lib/auth";
 import { sanitizeNextPath } from "@/lib/urls";
