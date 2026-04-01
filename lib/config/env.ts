@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type PublicSupabaseEnv = {
   url: string;
   anonKey: string;
@@ -8,64 +10,78 @@ export type GroqEnv = {
   model: string;
 };
 
-const requiredEnvReaders = {
-  GROQ_API_KEY: () => process.env.GROQ_API_KEY,
-  GROQ_MODEL: () => process.env.GROQ_MODEL,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  NEXT_PUBLIC_SUPABASE_URL: () => process.env.NEXT_PUBLIC_SUPABASE_URL,
-} as const;
+const supabaseUrlSchema = z
+  .string()
+  .trim()
+  .min(1, "NEXT_PUBLIC_SUPABASE_URL is required.")
+  .refine(
+    (val) => {
+      try {
+        const parsed = new URL(val);
+        const isLocal = ["127.0.0.1", "localhost"].includes(parsed.hostname);
+        return parsed.protocol === "https:" || (isLocal && parsed.protocol === "http:");
+      } catch {
+        return false;
+      }
+    },
+    { message: "NEXT_PUBLIC_SUPABASE_URL must be a valid Supabase project URL (https)." },
+  );
 
-type RequiredEnvName = keyof typeof requiredEnvReaders;
+const supabaseAnonKeySchema = z
+  .string()
+  .trim()
+  .min(1, "NEXT_PUBLIC_SUPABASE_ANON_KEY is required.")
+  .refine(
+    (val) => {
+      const lower = val.toLowerCase();
+      return !lower.startsWith("sb_secret_") && !lower.includes("service_role");
+    },
+    {
+      message:
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY must be the public anon/publishable key — never a secret or service-role key.",
+    },
+  );
 
-function readRequiredEnvValue(name: RequiredEnvName) {
-  const normalizedValue = requiredEnvReaders[name]()?.trim();
+const publicSupabaseEnvSchema = z.object({
+  NEXT_PUBLIC_SUPABASE_URL: supabaseUrlSchema,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: supabaseAnonKeySchema,
+});
 
-  if (!normalizedValue) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-
-  return normalizedValue;
-}
-
-function validateSupabaseUrl(url: string) {
-  try {
-    const parsed = new URL(url);
-    const isLocalHost = ["127.0.0.1", "localhost"].includes(parsed.hostname);
-
-    if (parsed.protocol !== "https:" && !(isLocalHost && parsed.protocol === "http:")) {
-      throw new Error("NEXT_PUBLIC_SUPABASE_URL must use https, or http only for local Supabase development.");
-    }
-  } catch {
-    throw new Error("NEXT_PUBLIC_SUPABASE_URL must be a valid Supabase URL.");
-  }
-}
-
-function validatePublicSupabaseKey(key: string) {
-  const normalized = key.toLowerCase();
-
-  if (normalized.startsWith("sb_secret_") || normalized.includes("service_role")) {
-    throw new Error(
-      "NEXT_PUBLIC_SUPABASE_ANON_KEY must use the public anon or publishable key, not a secret key.",
-    );
-  }
-}
+const groqEnvSchema = z.object({
+  GROQ_API_KEY: z.string().trim().min(1, "GROQ_API_KEY is required."),
+  GROQ_MODEL: z.string().trim().min(1, "GROQ_MODEL is required."),
+});
 
 export function getPublicSupabaseEnv(): PublicSupabaseEnv {
-  const anonKey = readRequiredEnvValue("NEXT_PUBLIC_SUPABASE_ANON_KEY");
-  const url = readRequiredEnvValue("NEXT_PUBLIC_SUPABASE_URL");
+  const result = publicSupabaseEnvSchema.safeParse({
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  });
 
-  validatePublicSupabaseKey(anonKey);
-  validateSupabaseUrl(url);
+  if (!result.success) {
+    const messages = result.error.issues.map((i) => `  • ${i.message}`).join("\n");
+    throw new Error(`[SOPSmith] Environment configuration error:\n${messages}`);
+  }
 
   return {
-    anonKey,
-    url,
+    url: result.data.NEXT_PUBLIC_SUPABASE_URL,
+    anonKey: result.data.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   };
 }
 
 export function getGroqEnv(): GroqEnv {
+  const result = groqEnvSchema.safeParse({
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+    GROQ_MODEL: process.env.GROQ_MODEL,
+  });
+
+  if (!result.success) {
+    const messages = result.error.issues.map((i) => `  • ${i.message}`).join("\n");
+    throw new Error(`[SOPSmith] Environment configuration error:\n${messages}`);
+  }
+
   return {
-    apiKey: readRequiredEnvValue("GROQ_API_KEY"),
-    model: readRequiredEnvValue("GROQ_MODEL"),
+    apiKey: result.data.GROQ_API_KEY,
+    model: result.data.GROQ_MODEL,
   };
 }
