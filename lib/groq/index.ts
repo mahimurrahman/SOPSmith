@@ -14,7 +14,11 @@ const MAX_CACHE_SIZE = 50;
 const generationCache = new Map<string, string>();
 
 function getCacheKey(input: CreateSopInput) {
-  return `${input.title.trim().toLowerCase()}|||${input.rawNotes.trim().toLowerCase()}`;
+  // Use JSON.stringify to avoid delimiter collisions from arbitrary title/notes content
+  return JSON.stringify({
+    title: input.title.trim().toLowerCase(),
+    rawNotes: input.rawNotes.trim().toLowerCase(),
+  });
 }
 
 function cacheGet(key: string) {

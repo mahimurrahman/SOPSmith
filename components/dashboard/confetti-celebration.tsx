@@ -23,6 +23,8 @@ export function ConfettiCelebration() {
       const x = Math.random() * 100;
       const delay = Math.random() * 0.5;
       const duration = Math.random() * 1.5 + 1;
+      const rotation = Math.random() * 720 - 360;
+      const animName = `confetti-fall-${i}`;
 
       el.style.cssText = `
         position: absolute;
@@ -34,33 +36,37 @@ export function ConfettiCelebration() {
         border-radius: ${Math.random() > 0.5 ? "50%" : "2px"};
         opacity: 1;
         transform: translateY(0) rotate(0deg);
-        animation: confetti-fall ${duration}s ease-in ${delay}s forwards;
+        animation: ${animName} ${duration}s ease-in ${delay}s forwards;
       `;
 
       el.setAttribute("aria-hidden", "true");
       container.appendChild(el);
-      return el;
+      return { el, animName, rotation };
     });
 
     const style = document.createElement("style");
-    style.textContent = `
-      @keyframes confetti-fall {
-        to {
-          transform: translateY(120px) rotate(${Math.random() * 720}deg);
-          opacity: 0;
-        }
-      }
-    `;
+    style.textContent = particles
+      .map(
+        ({ animName, rotation }) => `
+          @keyframes ${animName} {
+            to {
+              transform: translateY(120px) rotate(${rotation}deg);
+              opacity: 0;
+            }
+          }
+        `,
+      )
+      .join("\n");
     document.head.appendChild(style);
 
     const timeout = window.setTimeout(() => {
-      particles.forEach((p) => p.remove());
+      particles.forEach((p) => p.el.remove());
       style.remove();
     }, 2500);
 
     return () => {
       window.clearTimeout(timeout);
-      particles.forEach((p) => p.remove());
+      particles.forEach((p) => p.el.remove());
       style.remove();
     };
   }, []);

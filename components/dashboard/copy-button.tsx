@@ -20,6 +20,13 @@ function convertToPlainText(markdown: string): string {
     .trim();
 }
 
+/**
+ * Converts Markdown to a Notion-friendly plain text format.
+ * Notion's paste-from-clipboard feature interprets plain text well, but
+ * preserving H1/H2 hierarchy as bracketed section labels makes it easy to
+ * identify sections before converting them into Notion Toggle or Heading blocks.
+ * See: https://www.notion.so/help/keyboard-shortcuts#markdown-shortcuts
+ */
 function convertToNotion(markdown: string): string {
   return markdown
     .replace(/^# (.+)$/gm, "$1\n")

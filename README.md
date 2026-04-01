@@ -359,22 +359,26 @@ npm run build
 4. Sign in with Google if enabled
 5. Open `/dashboard`
 6. Create a new SOP
-7. Confirm the app redirects to the detail page
+7. Confirm the app redirects to the detail page with a confetti animation
 8. Confirm the SOP appears in the library
-9. Confirm copy-to-clipboard works
-10. Confirm a fake SOP URL shows not-found
-11. Confirm signed-out users cannot access protected routes
+9. Confirm multi-format copy-to-clipboard works (Markdown, Plain Text, Notion)
+10. Confirm TXT download and PDF print work
+11. Confirm `Cmd+Enter` on the new SOP form submits the generation
+12. Confirm a fake SOP URL shows not-found
+13. Confirm signed-out users cannot access protected routes
 
-## Why This Works Well As A Portfolio Project
+---
 
-SOPSmith shows a credible real-world AI SaaS without pretending to be bigger than it is. It demonstrates:
+## Documentation
 
-- App Router architecture
-- SSR auth with Supabase
-- protected routes and callback handling
-- prompt engineering plus output validation
-- AI generation as part of a real CRUD workflow
-- RLS-based multi-user data isolation
-- clean MVP scoping instead of feature bloat
+| Document | Purpose |
+|---|---|
+| [docs/setup-guide.md](./docs/setup-guide.md) | Full local and production setup walkthrough |
+| [docs/contributing.md](./docs/contributing.md) | Code style, commit conventions, PR checklist |
+| [CHANGELOG.md](./CHANGELOG.md) | Version history and change log |
 
-It is a strong example of shipping a practical AI workflow product with thoughtful technical tradeoffs.
+---
+
+## License
+
+[MIT](./LICENSE) © SOPSmith
