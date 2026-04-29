@@ -13,6 +13,7 @@ export type AttachmentUploadInput = {
   fileName: string;
   fileSize: number;
   fileType: AllowedAttachmentMimeType;
+  extractedText?: string | null;
   storagePath: string;
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ATTACHMENTS_ACCEPT } from "@/lib/attachments/shared";
+import { ATTACHMENTS_ACCEPT, MAX_ATTACHMENT_SIZE_BYTES } from "@/lib/attachments/shared";
 import { cn } from "@/lib/cn";
 import { formatFileSize } from "@/lib/format";
 import { Button } from "@/components/ui/Button";
@@ -65,7 +65,7 @@ export function FileUploader({
         </div>
 
         <div className="muted-panel rounded-[1.35rem] px-4 py-3 text-xs leading-6 text-muted">
-          Supported files: PDF, DOC, DOCX, and TXT up to 50 MB each.
+          Supported files: PDF, DOC, DOCX, and TXT up to {Math.round(MAX_ATTACHMENT_SIZE_BYTES / (1024 * 1024))} MB each.
         </div>
       </div>
 

@@ -21,7 +21,7 @@ export function AppShell({ children, className, sidebarFooter, subtitle }: AppSh
 
       {/* Mobile Top Navigation */}
       <div className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border)] bg-background-light dark:bg-background-dark z-20 sticky top-0">
-        <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/dashboard/command" className="flex items-center gap-2">
           <div className="bg-primary p-2 rounded-lg flex shadow-md">
             <span className="material-symbols-outlined text-white text-[16px] leading-none">auto_fix_high</span>
           </div>

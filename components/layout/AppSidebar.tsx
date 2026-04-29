@@ -28,16 +28,46 @@ export function AppSidebar({ footer, subtitle }: AppSidebarProps) {
 
       <nav className="flex-1 px-4 space-y-1 mt-2">
         <SidebarLink
-          href="/dashboard"
+          href="/dashboard/command"
+          label="Command"
+          icon="monitoring"
+          active={pathname === "/dashboard/command" || pathname === "/dashboard"}
+        />
+        <SidebarLink
+          href="/dashboard/library"
           label="Library"
           icon="library_books"
-          active={pathname === "/dashboard"}
+          active={pathname === "/dashboard/library"}
         />
         <SidebarLink
           href="/dashboard/new"
           label="New SOP"
           icon="add_circle"
           active={pathname === "/dashboard/new"}
+        />
+        <SidebarLink
+          href="/dashboard/agents"
+          label="Agents"
+          icon="smart_toy"
+          active={pathname === "/dashboard/agents"}
+        />
+        <SidebarLink
+          href="/dashboard/approvals"
+          label="Approvals"
+          icon="rule"
+          active={pathname === "/dashboard/approvals"}
+        />
+        <SidebarLink
+          href="/dashboard/integrations"
+          label="Integrations"
+          icon="hub"
+          active={pathname === "/dashboard/integrations"}
+        />
+        <SidebarLink
+          href="/dashboard/billing"
+          label="Billing"
+          icon="receipt_long"
+          active={pathname === "/dashboard/billing"}
         />
       </nav>
 
@@ -50,7 +80,7 @@ export function AppSidebar({ footer, subtitle }: AppSidebarProps) {
           </div>
           <div className="flex flex-col min-w-0 flex-1">
             <p className="text-xs font-bold truncate" title={subtitle}>{subtitle || "Operator"}</p>
-            <p className="text-[10px] font-mono text-muted uppercase tracking-wider mt-0.5">Workspace</p>
+            <p className="text-[10px] font-mono text-muted uppercase tracking-wider mt-0.5">Agency workspace</p>
           </div>
         </div>
         

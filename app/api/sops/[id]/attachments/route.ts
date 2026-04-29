@@ -96,7 +96,7 @@ export async function POST(
     }
 
     const files = readAttachmentFiles(formData);
-    const uploads = validateAttachmentFiles(sopId, files);
+    const uploads = await validateAttachmentFiles(sopId, files);
 
     for (const upload of uploads) {
       await uploadAttachmentObject(upload.storagePath, upload.file, upload.fileType, supabase);
@@ -108,6 +108,7 @@ export async function POST(
       file_size: upload.fileSize,
       file_type: upload.fileType,
       file_url: upload.storagePath,
+      extracted_text: upload.extractedText ?? null,
       sop_id: sopId,
     }));
     const createdRows = await createSopFiles(recordsToInsert, supabase);

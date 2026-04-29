@@ -22,12 +22,20 @@ export default async function HomePage() {
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl font-bold tracking-tight font-display text-foreground">SOPSmith</span>
           </Link>
-          <Link
-            href={primaryHref}
-            className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all"
-          >
-            Open App
-          </Link>
+          <nav className="flex items-center gap-4">
+            <Link
+              href="/pricing"
+              className="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              Pricing
+            </Link>
+            <Link
+              href={primaryHref}
+              className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all"
+            >
+              Open App
+            </Link>
+          </nav>
         </div>
       </header>
 
@@ -44,12 +52,12 @@ export default async function HomePage() {
                 style={{ textWrap: "balance" } as React.CSSProperties}
               >
                 Turn rough notes<br />
-                into <em className="text-primary">procedures</em><br />
-                that work.
+                into <em className="text-primary">agentic SOPs</em><br />
+                agencies can run.
               </h1>
               <p className="text-lg sm:text-xl text-muted max-w-xl leading-relaxed">
-                Paste messy bullets, handoff notes, and process reminders. SOPSmith shapes them
-                into clean, structured SOPs — saved to your private library.
+                Paste messy client delivery notes. SOPSmith shapes them into structured SOPs,
+                audits quality, logs agent work, and keeps approvals under your control.
               </p>
               <Link
                 href={primaryHref}

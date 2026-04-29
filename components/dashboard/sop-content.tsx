@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, type ComponentProps } from "react";
+import { useSearchParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import type { StructuredSop } from "@/lib/sops";
 
 type SopSection = {
   body: string;
@@ -11,6 +13,7 @@ type SopSection = {
 
 type SopContentProps = {
   content: string;
+  structuredData?: StructuredSop | null;
   title: string;
 };
 
@@ -111,6 +114,30 @@ function parseSopContent(content: string) {
 
   flushSection();
   return { contentTitle, sections };
+}
+
+function buildSectionsFromStructuredData(structuredData: StructuredSop) {
+  const sections: SopSection[] = [
+    { heading: "Purpose", body: structuredData.purpose },
+    { heading: "Scope", body: structuredData.scope.map((item) => `- ${item}`).join("\n") },
+    { heading: "Tools Needed", body: structuredData.tools.map((item) => `- ${item}`).join("\n") },
+    { heading: "Inputs", body: structuredData.inputs.map((item) => `- ${item}`).join("\n") },
+    { heading: "Steps", body: structuredData.steps.map((item, index) => `${index + 1}. ${item}`).join("\n") },
+    {
+      heading: "Quality Checks",
+      body: structuredData.quality_checks.map((item) => `- ${item}`).join("\n"),
+    },
+    {
+      heading: "Checklist",
+      body: structuredData.checklist.map((item) => `- [ ] ${item}`).join("\n"),
+    },
+    { heading: "Notes", body: structuredData.notes.map((item) => `- ${item}`).join("\n") },
+  ];
+
+  return {
+    contentTitle: structuredData.title,
+    sections,
+  };
 }
 
 // ──── Section Renderers ────
@@ -247,17 +274,17 @@ function FallbackSection({ body }: { body: string }) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mt-4 mb-6 space-y-2 marker:text-primary" {...props} />,
-          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mt-4 mb-6 space-y-2 marker:text-primary font-medium" {...props} />,
-          li: ({ node, ...props }) => <li className="pl-1.5 text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed" {...props} />,
-          p: ({ node, ...props }) => <p className="mb-5 text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed" {...props} />,
-          h3: ({ node, ...props }) => <h3 className="text-lg font-bold mt-8 mb-4 text-slate-900 dark:text-white font-display tracking-tight" {...props} />,
-          h4: ({ node, ...props }) => <h4 className="text-base font-bold mt-6 mb-3 text-slate-900 dark:text-white font-display" {...props} />,
-          strong: ({ node, ...props }) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
-          a: ({ node, ...props }) => <a className="text-primary hover:underline font-medium hover:text-primary/80 transition-colors cursor-pointer" {...props} />,
-          blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-primary/40 bg-primary/5 pl-5 pr-4 py-3 my-6 rounded-r-xl italic text-slate-700 dark:text-slate-300" {...props} />,
-          code(props: any) {
-            const { children, className, node, ...rest } = props;
+          ul: (props) => <ul className="list-disc pl-5 mt-4 mb-6 space-y-2 marker:text-primary" {...props} />,
+          ol: (props) => <ol className="list-decimal pl-5 mt-4 mb-6 space-y-2 marker:text-primary font-medium" {...props} />,
+          li: (props) => <li className="pl-1.5 text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed" {...props} />,
+          p: (props) => <p className="mb-5 text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed" {...props} />,
+          h3: (props) => <h3 className="text-lg font-bold mt-8 mb-4 text-slate-900 dark:text-white font-display tracking-tight" {...props} />,
+          h4: (props) => <h4 className="text-base font-bold mt-6 mb-3 text-slate-900 dark:text-white font-display" {...props} />,
+          strong: (props) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+          a: (props) => <a className="text-primary hover:underline font-medium hover:text-primary/80 transition-colors cursor-pointer" {...props} />,
+          blockquote: (props) => <blockquote className="border-l-4 border-primary/40 bg-primary/5 pl-5 pr-4 py-3 my-6 rounded-r-xl italic text-slate-700 dark:text-slate-300" {...props} />,
+          code(props: ComponentProps<"code">) {
+            const { children, className, ...rest } = props;
             const match = /language-(\w+)/.exec(className || '');
             const isInline = !match && !className;
             return isInline ? (
@@ -316,8 +343,13 @@ function renderSection(section: SopSection) {
   }
 }
 
-export function SopContent({ content, title }: SopContentProps) {
-  const parsed = parseSopContent(content);
+export function SopContent({ content, structuredData, title }: SopContentProps) {
+  const searchParams = useSearchParams();
+  const flashKey = searchParams.get("updated");
+  const parsed = useMemo(
+    () => (structuredData ? buildSectionsFromStructuredData(structuredData) : parseSopContent(content)),
+    [content, structuredData],
+  );
 
   return (
     <article className="space-y-16 bg-[var(--surface-strong)] mx-auto p-12 sm:p-16 lg:p-24 shadow-xl border border-[var(--border)] max-w-[210mm] min-h-[297mm] rounded-2xl">
@@ -334,8 +366,17 @@ export function SopContent({ content, title }: SopContentProps) {
 
       {parsed.sections.map((section) => {
         const type = parseHeadingType(section.heading);
+        const sectionKey =
+          type === "Quality Checks"
+            ? "quality_checks"
+            : type?.toLowerCase().replace(/\s+/g, "_") ?? section.heading.toLowerCase();
+        const shouldHighlight =
+          flashKey === "full" || flashKey === "restore" || flashKey === sectionKey;
         return (
-          <section key={section.heading}>
+          <section
+            key={section.heading}
+            className={shouldHighlight ? "rounded-2xl ring-2 ring-primary/30 bg-primary/5 px-4 py-5 -mx-4 transition-all" : ""}
+          >
             <h2 className="text-xs font-bold uppercase tracking-[0.25em] text-primary mb-6 flex items-center gap-2">
               <span className="material-symbols-outlined text-[14px] opacity-60">
                 {sectionIcon(type)}

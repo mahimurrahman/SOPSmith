@@ -10,10 +10,21 @@ import {
   logAttachmentsError,
   type AttachmentsAction,
 } from "./errors";
+import { extractTextFromBytes } from "./extraction";
 import { ATTACHMENTS_BUCKET } from "./validation";
 
 async function getClient(client?: SupabaseClient<Database>) {
   return client ?? createServerSupabaseClient();
+}
+
+function isMissingColumnError(error: unknown, column: string) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const candidate = error as { code?: string; message?: string | null };
+  const message = candidate.message?.toLowerCase() ?? "";
+  return candidate.code === "42703" && message.includes(column.toLowerCase());
 }
 
 function createStorageError(
@@ -30,11 +41,22 @@ function createStorageError(
 
 export async function listSopFiles(sopId: string, client?: SupabaseClient<Database>) {
   const supabase = await getClient(client);
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("sop_files")
-    .select("id,sop_id,file_name,file_type,file_size,created_at")
+    .select("id,sop_id,file_name,file_type,file_size,file_url,extracted_text,created_at")
     .eq("sop_id", sopId)
     .order("created_at", { ascending: false });
+
+  if (error && isMissingColumnError(error, "extracted_text")) {
+    const fallback = await supabase
+      .from("sop_files")
+      .select("id,sop_id,file_name,file_type,file_size,file_url,created_at")
+      .eq("sop_id", sopId)
+      .order("created_at", { ascending: false });
+
+    data = (fallback.data ?? []).map((file) => ({ ...file, extracted_text: null })) as typeof data;
+    error = fallback.error;
+  }
 
   if (error) {
     logAttachmentsError("list", error, { sopId });
@@ -42,7 +64,7 @@ export async function listSopFiles(sopId: string, client?: SupabaseClient<Databa
   }
 
   return (data ?? []) as Array<
-    Pick<SopFile, "created_at" | "file_name" | "file_size" | "file_type" | "id" | "sop_id">
+    Pick<SopFile, "created_at" | "extracted_text" | "file_name" | "file_size" | "file_type" | "file_url" | "id" | "sop_id">
   >;
 }
 
@@ -52,12 +74,24 @@ export async function getSopFileById(
   client?: SupabaseClient<Database>,
 ) {
   const supabase = await getClient(client);
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("sop_files")
-    .select("id,sop_id,file_name,file_type,file_size,file_url,created_at")
+    .select("id,sop_id,file_name,file_type,file_size,file_url,extracted_text,created_at")
     .eq("id", fileId)
     .eq("sop_id", sopId)
     .maybeSingle();
+
+  if (error && isMissingColumnError(error, "extracted_text")) {
+    const fallback = await supabase
+      .from("sop_files")
+      .select("id,sop_id,file_name,file_type,file_size,file_url,created_at")
+      .eq("id", fileId)
+      .eq("sop_id", sopId)
+      .maybeSingle();
+
+    data = fallback.data ? ({ ...fallback.data, extracted_text: null } as typeof data) : null;
+    error = fallback.error;
+  }
 
   if (error) {
     logAttachmentsError("detail", error, { fileId, sopId });
@@ -66,16 +100,27 @@ export async function getSopFileById(
 
   return data as Pick<
     SopFile,
-    "created_at" | "file_name" | "file_size" | "file_type" | "file_url" | "id" | "sop_id"
+    "created_at" | "extracted_text" | "file_name" | "file_size" | "file_type" | "file_url" | "id" | "sop_id"
   > | null;
 }
 
 export async function createSopFiles(values: SopFileInsert[], client?: SupabaseClient<Database>) {
   const supabase = await getClient(client);
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("sop_files")
     .insert(values)
-    .select("id,sop_id,file_name,file_type,file_size,file_url,created_at");
+    .select("id,sop_id,file_name,file_type,file_size,file_url,extracted_text,created_at");
+
+  if (error && isMissingColumnError(error, "extracted_text")) {
+    const legacyValues = values.map(({ extracted_text: _extractedText, ...rest }) => rest);
+    const fallback = await supabase
+      .from("sop_files")
+      .insert(legacyValues)
+      .select("id,sop_id,file_name,file_type,file_size,file_url,created_at");
+
+    data = (fallback.data ?? []).map((file) => ({ ...file, extracted_text: null })) as typeof data;
+    error = fallback.error;
+  }
 
   if (error) {
     logAttachmentsError("create", error, { count: values.length, sopId: values[0]?.sop_id });
@@ -83,7 +128,7 @@ export async function createSopFiles(values: SopFileInsert[], client?: SupabaseC
   }
 
   return (data ?? []) as Array<
-    Pick<SopFile, "created_at" | "file_name" | "file_size" | "file_type" | "file_url" | "id" | "sop_id">
+    Pick<SopFile, "created_at" | "extracted_text" | "file_name" | "file_size" | "file_type" | "file_url" | "id" | "sop_id">
   >;
 }
 
@@ -114,11 +159,56 @@ export async function removeAttachmentObjects(paths: string[], client?: Supabase
   const { error } = await supabase.storage.from(ATTACHMENTS_BUCKET).remove(paths);
 
   if (error) {
-    logAttachmentsError("cleanup", error, {
-      bucket: ATTACHMENTS_BUCKET,
-      paths,
-    });
+    createStorageError("cleanup", error);
   }
+}
+
+export async function getAttachmentContent(storagePath: string, client?: SupabaseClient<Database>) {
+  const supabase = await getClient(client);
+  const { data, error } = await supabase.storage.from(ATTACHMENTS_BUCKET).download(storagePath);
+
+  if (error) {
+    console.error("[repository:getAttachmentContent]", error);
+    return null;
+  }
+
+  return await data.text();
+}
+
+export async function extractTextFromSopAttachments(sopId: string, client?: SupabaseClient<Database>) {
+  const files = await listSopFiles(sopId, client);
+  let combinedText = "";
+
+  for (const file of files) {
+    let content = file.extracted_text;
+
+    if (!content) {
+      const downloaded = await getAttachmentBinary(file.file_url, client);
+      if (downloaded) {
+        content = extractTextFromBytes(downloaded.bytes, file.file_type, file.file_name) || null;
+      }
+    }
+
+    if (content) {
+      combinedText += `\n--- File: ${file.file_name} ---\n${content}\n`;
+    }
+  }
+
+  return combinedText;
+}
+
+export async function getAttachmentBinary(storagePath: string, client?: SupabaseClient<Database>) {
+  const supabase = await getClient(client);
+  const { data, error } = await supabase.storage.from(ATTACHMENTS_BUCKET).download(storagePath);
+
+  if (error) {
+    console.error("[repository:getAttachmentBinary]", error);
+    return null;
+  }
+
+  return {
+    bytes: new Uint8Array(await data.arrayBuffer()),
+  };
 }
 
 export async function createAttachmentSignedUrl(

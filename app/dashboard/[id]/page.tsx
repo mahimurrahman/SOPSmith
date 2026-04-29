@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AttachmentsSection } from "@/components/dashboard/attachments-section";
+import { AuditAction } from "@/components/dashboard/audit-action";
 import { CopyButton } from "@/components/dashboard/copy-button";
 import { DeleteSopButton } from "@/components/dashboard/delete-sop-button";
 import { DownloadButtons } from "@/components/dashboard/download-buttons";
 import { RegenerateButton } from "@/components/dashboard/regenerate-button";
+import { SopAgentPanel } from "@/components/dashboard/sop-agent-panel";
 import { SopContent } from "@/components/dashboard/sop-content";
+import { VersionHistory } from "@/components/dashboard/version-history";
 import { Accordion } from "@/components/ui/Accordion";
 import { listSopFiles, toSopFileSummary } from "@/lib/attachments";
 import { requireUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
-import { getSopById } from "@/lib/sops";
+import { getSopById, getSopVersions } from "@/lib/sops";
 import { uuidSchema } from "@/lib/validators";
 
 type SopDetailPageProps = {
   params: Promise<{
     id: string;
+  }>;
+  searchParams?: Promise<{
+    tick?: string;
+    updated?: string;
   }>;
 };
 
@@ -26,8 +32,9 @@ export const metadata: Metadata = {
   description: "Read and copy a saved SOP.",
 };
 
-export default async function SopDetailPage({ params }: SopDetailPageProps) {
+export default async function SopDetailPage({ params, searchParams }: SopDetailPageProps) {
   const { id } = await params;
+  await searchParams;
 
   if (!uuidSchema.safeParse(id).success) {
     notFound();
@@ -41,6 +48,7 @@ export default async function SopDetailPage({ params }: SopDetailPageProps) {
   }
 
   const attachments = (await listSopFiles(sop.id, supabase)).map(toSopFileSummary);
+  const versions = await getSopVersions(sop.id, user.id, supabase);
 
   return (
     <div className="w-full">
@@ -63,11 +71,14 @@ export default async function SopDetailPage({ params }: SopDetailPageProps) {
             </div>
           </header>
 
-          <SopContent content={sop.content} title={sop.title} />
+          <SopContent content={sop.content} structuredData={sop.structured_data} title={sop.title} />
         </div>
 
         <aside className="lg:col-span-4">
           <div className="sticky top-10 space-y-8">
+            <SopAgentPanel sopId={sop.id} />
+            <AuditAction sopId={sop.id} />
+
             {sop.raw_notes.trim() ? (
               <Accordion
                 className="bg-[var(--surface)] rounded-xl border border-[var(--border)] overflow-hidden"
@@ -91,6 +102,8 @@ export default async function SopDetailPage({ params }: SopDetailPageProps) {
             </div>
 
             <DownloadButtons sop={{ title: sop.title, content: sop.content }} />
+
+            <VersionHistory sopId={sop.id} versions={versions} />
 
             <RegenerateButton sopId={sop.id} />
 
