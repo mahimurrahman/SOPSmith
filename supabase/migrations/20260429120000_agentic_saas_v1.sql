@@ -1,19 +1,5 @@
 create extension if not exists pgcrypto;
 
--- Create the helper function FIRST, before any policies reference it
-create or replace function public.is_workspace_member(target_workspace_id uuid)
-returns boolean
-language sql
-security definer
-set search_path = public
-as $$
-  select exists (
-    select 1 from public.workspace_members
-    where workspace_id = target_workspace_id
-      and user_id = auth.uid()
-  );
-$$;
-
 create table if not exists public.workspaces (
   id uuid primary key default gen_random_uuid(),
   owner_user_id uuid not null references auth.users (id) on delete cascade,
@@ -30,6 +16,19 @@ create table if not exists public.workspace_members (
   created_at timestamptz not null default now(),
   unique (workspace_id, user_id)
 );
+
+create or replace function public.is_workspace_member(target_workspace_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.workspace_members
+    where workspace_id = target_workspace_id
+      and user_id = auth.uid()
+  );
+$$;
 
 alter table public.sops
   add column if not exists workspace_id uuid references public.workspaces (id) on delete cascade;
