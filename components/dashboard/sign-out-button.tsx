@@ -9,8 +9,9 @@ export function SignOutButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-foreground shadow-soft disabled:cursor-not-allowed disabled:opacity-60"
+      className="w-full flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-muted)] hover:bg-[var(--surface)] transition-all px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
     >
+      <span className="material-symbols-outlined text-[18px]">logout</span>
       {pending ? "Signing out..." : "Sign out"}
     </button>
   );

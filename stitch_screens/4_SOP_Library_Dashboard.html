@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SOPSmith - Enterprise Process Governance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0a0f1a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
+        .text-xxs { font-size: 0.65rem; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-200 font-sans">
+<div class="flex min-h-screen">
+<!-- Side Navigation -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800/60 flex flex-col bg-white dark:bg-background-dark shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="h-9 w-9 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined font-bold">bolt</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">SOPSmith</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-2">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-semibold">Intelligence Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-primary/5 dark:bg-primary/10 text-primary rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[22px] font-variation-fill">library_books</span>
+<span class="text-sm font-bold">Standard Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-sm font-semibold">Frameworks</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-slate-200 dark:border-slate-800/60">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-semibold">Settings</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-3 py-3 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-100 dark:border-slate-800/50">
+<div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+<div class="flex flex-col min-w-0">
+<p class="text-xs font-bold text-slate-900 dark:text-white truncate">Alex Rivera</p>
+<p class="text-xxs font-medium text-slate-500 dark:text-slate-500 uppercase tracking-wider">Systems Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Hero Header Section -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/60 rounded-2xl p-10 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 -mt-20 -mr-20 h-64 w-64 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10">
+<div class="max-w-2xl">
+<h2 class="text-4xl font-extrabold text-slate-900 dark:text-white leading-[1.1]">Process Repository</h2>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-lg font-medium">Standardize operational excellence across your organization with verified SOPs and workflow governance.</p>
+<div class="mt-8 flex flex-wrap gap-12">
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-1">Authenticated SOPs</p>
+<p class="text-4xl font-extrabold text-primary tabular-nums">24</p>
+</div>
+<div class="w-px h-12 bg-slate-200 dark:bg-slate-800 self-end mb-1"></div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-1">In Review</p>
+<p class="text-4xl font-extrabold text-slate-900 dark:text-white tabular-nums">8</p>
+</div>
+</div>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-7 py-3.5 rounded-xl font-bold transition-all shadow-xl shadow-primary/25 self-start md:self-center">
+<span class="material-symbols-outlined font-bold">add</span>
+                        New Protocol
+                    </button>
+</div>
+</div>
+<!-- Filters & Search Bar -->
+<div class="mt-12 flex flex-col md:flex-row gap-4 items-center justify-between">
+<div class="relative w-full md:max-w-lg">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="w-full bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800/80 rounded-xl pl-12 pr-4 py-3.5 text-slate-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600" placeholder="Search by protocol name, tag, or department..." type="text"/>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-between gap-6 px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-[13px] font-bold tracking-tight hover:border-primary/50 transition-all">
+<span class="flex items-center gap-2.5"><span class="material-symbols-outlined text-primary text-[18px]">domain</span> Department</span>
+<span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span>
+</button>
+<button class="flex-1 md:flex-none flex items-center justify-between gap-6 px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-[13px] font-bold tracking-tight hover:border-primary/50 transition-all">
+<span class="flex items-center gap-2.5"><span class="material-symbols-outlined text-primary text-[18px]">verified_user</span> Status</span>
+<span class="material-symbols-outlined text-slate-400 text-[18px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- SOP Grid -->
+<div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- SOP Card 1 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">hub</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Authenticated</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Client Strategic Onboarding</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">End-to-end integration framework for high-value accounts, ensuring alignment on KPIs and deliverable timelines.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            v2.4 • 2d ago
+                        </div>
+<div class="flex -space-x-2">
+<div class="h-7 w-7 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-400">JD</div>
+<div class="h-7 w-7 rounded-full bg-primary/20 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-primary">AR</div>
+</div>
+</div>
+</div>
+<!-- SOP Card 2 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">terminal</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Authenticated</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">QA Release Governance</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">Mandatory code audit procedures for production environments including security and performance benchmarks.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            v1.9 • 5d ago
+                        </div>
+<div class="h-7 w-7 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-400">MK</div>
+</div>
+</div>
+<!-- SOP Card 3 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-amber-100/50 dark:bg-amber-900/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-600 text-[24px]">pending_actions</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-[10px] font-extrabold uppercase tracking-widest">Draft</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Omnichannel Distribution</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">Optimizing cross-platform content syndication to maximize organic reach and conversion metrics.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            Draft • 3h ago
+                        </div>
+<div class="h-7 w-7 rounded-full bg-primary/20 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-primary">AR</div>
+</div>
+</div>
+<!-- SOP Card 4 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">account_balance_wallet</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Authenticated</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Fiscal Reconciliation</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">Monthly audit and closing procedures for accounts payable and agency-wide expense reporting.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            v4.1 • 1w ago
+                        </div>
+<div class="h-7 w-7 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-400">SL</div>
+</div>
+</div>
+<!-- SOP Card 5 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">gshield</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Authenticated</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Data Access &amp; Encryption</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">Standardized protocols for zero-trust security architecture and sensitive credential management.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            v1.2 • 2w ago
+                        </div>
+<div class="h-7 w-7 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-400">JD</div>
+</div>
+</div>
+<!-- SOP Card 6 -->
+<div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 p-7 rounded-2xl hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 cursor-pointer flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div class="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[24px]">dynamic_form</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Authenticated</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">Lifecycle Engagement Ops</h3>
+<p class="mt-3 text-slate-500 dark:text-slate-400 text-[14px] leading-relaxed line-clamp-2 font-medium">Framework for automating recurring marketing communications and multivariate testing protocols.</p>
+<div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80">
+<div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 text-[11px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                            v3.7 • 1m ago
+                        </div>
+<div class="h-7 w-7 rounded-full bg-primary/20 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-bold text-primary">AR</div>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More (Subtle) -->
+<div class="mt-16 flex justify-center">
+<button class="px-10 py-3 border border-slate-200 dark:border-slate-800/80 rounded-xl text-xs font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all hover:text-slate-900 dark:hover:text-white">
+                    Load More Resources
+                </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

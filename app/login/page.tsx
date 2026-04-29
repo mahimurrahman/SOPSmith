@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { Grid } from "@/components/ui/Grid";
+import { BackButton } from "@/components/ui/BackButton";
 import { getOptionalUser } from "@/lib/auth";
 import { sanitizeNextPath } from "@/lib/urls";
 
@@ -39,63 +40,51 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     : undefined;
 
   return (
-    <main className="page-shell">
-      <Container className="flex min-h-screen flex-col py-6">
-        <SiteHeader
-          signedIn={false}
-          actions={
-            <Link href="/" className="secondary-button">
-              Back to home
-            </Link>
-          }
-        />
+    <main className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: "radial-gradient(circle at 50% -20%, #1e293b, #0a0f18)" }}>
+      {/* Background Decoration */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[150px]"></div>
+      </div>
+      
+      {/* Global Back Action */}
+      <div className="absolute top-6 left-6 z-20">
+         <BackButton className="text-slate-400 hover:bg-slate-800/50" />
+      </div>
 
-        <Grid className="flex-1 items-center py-12 lg:grid-cols-[0.92fr_1.08fr]" gap="lg">
-          <Card as="section" className="space-y-6 rounded-[2rem] px-7 py-8">
-            <Link
-              href="/"
-              className="inline-flex rounded-full px-2 py-2 text-sm font-medium text-muted hover:text-foreground"
-            >
-              Back to home
-            </Link>
-
-            <div className="space-y-3">
-              <div className="eyebrow">Magic link sign in</div>
-              <h1 className="text-h1 font-semibold tracking-tight text-foreground">
-                Sign in once, then keep your SOP library moving.
-              </h1>
-              <p className="section-copy">
-                Enter your email and SOPSmith will send a one-time sign-in link. Open
-                the link on this device and you will land in your dashboard.
-              </p>
+      {/* Main Content Container */}
+      <div className="w-full max-w-[440px] flex flex-col items-center gap-10 z-10">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center gap-3">
+          <Link href="/" className="flex flex-col items-center gap-3 hover:opacity-80 transition-opacity">
+            <div className="flex items-center gap-3 text-primary">
+              <div className="size-11 flex items-center justify-center bg-primary/10 rounded-xl border border-primary/20 shadow-inner">
+                <span className="material-symbols-outlined text-3xl font-light">terminal</span>
+              </div>
+              <h2 className="text-2xl font-extrabold font-display tracking-tight text-slate-100">SOPSmith</h2>
             </div>
+          </Link>
+          <p className="text-slate-400 text-[13px] font-medium tracking-[0.05em] uppercase">Infrastructure Operations Platform</p>
+        </div>
 
-            <Card className="rounded-[1.75rem] px-5 py-5">
-              <p className="text-sm font-semibold text-foreground">How it works</p>
-              <ol className="mt-3 space-y-3 text-sm leading-6 text-muted">
-                <li>1. Enter the email tied to your SOP workspace.</li>
-                <li>2. Open the magic link from your inbox.</li>
-                <li>3. Land in your dashboard and start generating SOPs.</li>
-              </ol>
-            </Card>
+        {/* Auth Card */}
+        <LoginForm nextPath={sanitizeNextPath(params.next)} notice={notice} />
 
-            <Card tone="muted" className="rounded-[1.75rem] px-5 py-5">
-              <p className="text-sm font-semibold text-foreground">Inside the app</p>
-              <ul className="mt-3 space-y-3 text-sm leading-6 text-muted">
-                <li>Protected access to your saved SOPs</li>
-                <li>Fast generation from rough notes</li>
-                <li>One-click copy for use in docs or ops tools</li>
-              </ul>
-            </Card>
-          </Card>
-
-          <Card as="section" className="rounded-[2rem] px-7 py-8">
-            <LoginForm nextPath={sanitizeNextPath(params.next)} notice={notice} />
-          </Card>
-        </Grid>
-
-        <SiteFooter />
-      </Container>
+        {/* Footer Links */}
+        <div className="flex flex-col items-center gap-6 mt-4">
+          <div className="flex items-center gap-8 text-xs font-medium">
+            <Link href="/" className="text-slate-400 hover:text-primary transition-colors border-b border-transparent hover:border-primary/30 pb-0.5">Return Home</Link>
+            <span className="w-1 h-1 bg-slate-800 rounded-full"></span>
+            <span className="text-slate-400 border-b border-transparent pb-0.5 cursor-not-allowed">System Status</span>
+          </div>
+          <div className="flex flex-col items-center gap-1.5 opacity-60">
+            <div className="flex items-center gap-2 text-slate-500">
+              <span className="material-symbols-outlined text-sm font-light">encrypted</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em]">SOC2 Type II Compliant Infrastructure</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

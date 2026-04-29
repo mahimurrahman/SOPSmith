@@ -1,8 +1,11 @@
 "use client";
 
-import { ATTACHMENTS_ACCEPT, getAttachmentKind } from "@/lib/attachments/shared";
+import { ATTACHMENTS_ACCEPT, MAX_ATTACHMENT_SIZE_BYTES } from "@/lib/attachments/shared";
 import { cn } from "@/lib/cn";
 import { formatFileSize } from "@/lib/format";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { FileTypeIcon } from "@/components/ui/FileTypeIcon";
 
 export type FileUploadItemView = {
   displayName: string;
@@ -32,7 +35,9 @@ export function FileUploader({
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-medium text-foreground">Optional source files</p>
+            <p className="heading-display text-base font-semibold text-foreground">
+              Optional source files
+            </p>
             <p className="mt-1 text-sm leading-6 text-muted">
               Add PDFs, DOC or DOCX files, or TXT notes. Files upload after the SOP draft is
               saved.
@@ -40,11 +45,11 @@ export function FileUploader({
           </div>
           <label
             className={cn(
-              "secondary-button cursor-pointer",
+              "cursor-pointer",
               disabled && "pointer-events-none opacity-60",
             )}
           >
-            Add files
+            <span className="secondary-button">Add files (optional)</span>
             <input
               type="file"
               multiple
@@ -60,31 +65,20 @@ export function FileUploader({
         </div>
 
         <div className="muted-panel rounded-[1.35rem] px-4 py-3 text-xs leading-6 text-muted">
-          Supported files: PDF, DOC, DOCX, and TXT up to 5 MB each.
+          Supported files: PDF, DOC, DOCX, and TXT up to {Math.round(MAX_ATTACHMENT_SIZE_BYTES / (1024 * 1024))} MB each.
         </div>
       </div>
 
       {items.length > 0 ? (
         <ul className="space-y-3" aria-label="Selected attachments">
           {items.map((item) => {
-            const kind = getAttachmentKind(item.fileType, item.displayName);
-
             return (
-              <li key={item.id} className="surface-card rounded-[1.5rem] px-4 py-4">
+              <li key={item.id}>
+                <Card className="rounded-[1.5rem] px-4 py-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start gap-3">
-                      <span
-                        aria-hidden="true"
-                        className={cn(
-                          "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-xs font-black tracking-[0.2em]",
-                          kind === "pdf" && "bg-rose-500/14 text-rose-200",
-                          kind === "doc" && "bg-sky-500/14 text-sky-100",
-                          kind === "text" && "bg-emerald-500/14 text-emerald-100",
-                        )}
-                      >
-                        {kind === "pdf" ? "PDF" : kind === "doc" ? "DOC" : "TXT"}
-                      </span>
+                      <FileTypeIcon fileName={item.displayName} fileType={item.fileType} />
 
                       <div className="min-w-0 space-y-1">
                         <p className="truncate text-sm font-semibold text-foreground">
@@ -129,16 +123,19 @@ export function FileUploader({
                     </div>
                   </div>
 
-                  <button
+                  <Button
                     type="button"
                     onClick={() => onRemove(item.id)}
                     disabled={disabled || item.status === "uploading" || item.status === "success"}
-                    className="rounded-full border border-border bg-surface-muted px-3 py-2 text-xs font-semibold text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    className="min-w-24"
+                    variant="secondary"
+                    size="sm"
                     aria-label={`Remove ${item.displayName}`}
                   >
                     Remove
-                  </button>
+                  </Button>
                 </div>
+                </Card>
               </li>
             );
           })}

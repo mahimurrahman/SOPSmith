@@ -1,3 +1,5 @@
+import type { StructuredSop } from "./structured";
+
 export type CreateSopInput = {
   title: string;
   rawNotes: string;
@@ -23,10 +25,19 @@ export type SopDetail = {
   title: string;
   content: string;
   raw_notes: string;
+  structured_data: StructuredSop;
   created_at: string;
   updated_at: string;
 };
 
 export type CreatedSop = {
   id: string;
+};
+
+export type SopVersionSummary = {
+  id: string;
+  sop_id: string;
+  content: string;
+  structured_data: StructuredSop;
+  created_at: string;
 };

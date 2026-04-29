@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AttachmentsSection } from "@/components/dashboard/attachments-section";
+import { AuditAction } from "@/components/dashboard/audit-action";
 import { CopyButton } from "@/components/dashboard/copy-button";
+import { DeleteSopButton } from "@/components/dashboard/delete-sop-button";
+import { DownloadButtons } from "@/components/dashboard/download-buttons";
+import { RegenerateButton } from "@/components/dashboard/regenerate-button";
+import { SopAgentPanel } from "@/components/dashboard/sop-agent-panel";
 import { SopContent } from "@/components/dashboard/sop-content";
+import { VersionHistory } from "@/components/dashboard/version-history";
 import { Accordion } from "@/components/ui/Accordion";
-import { Card } from "@/components/ui/Card";
-import { getButtonClasses } from "@/components/ui/Button";
 import { listSopFiles, toSopFileSummary } from "@/lib/attachments";
 import { requireUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/format";
-import { getSopById } from "@/lib/sops";
+import { getSopById, getSopVersions } from "@/lib/sops";
 import { uuidSchema } from "@/lib/validators";
 
 type SopDetailPageProps = {
   params: Promise<{
     id: string;
+  }>;
+  searchParams?: Promise<{
+    tick?: string;
+    updated?: string;
   }>;
 };
 
@@ -25,8 +32,9 @@ export const metadata: Metadata = {
   description: "Read and copy a saved SOP.",
 };
 
-export default async function SopDetailPage({ params }: SopDetailPageProps) {
+export default async function SopDetailPage({ params, searchParams }: SopDetailPageProps) {
   const { id } = await params;
+  await searchParams;
 
   if (!uuidSchema.safeParse(id).success) {
     notFound();
@@ -40,76 +48,69 @@ export default async function SopDetailPage({ params }: SopDetailPageProps) {
   }
 
   const attachments = (await listSopFiles(sop.id, supabase)).map(toSopFileSummary);
+  const versions = await getSopVersions(sop.id, user.id, supabase);
 
   return (
-    <section className="space-y-6">
-      <div className="sticky top-6 z-10">
-        <Card className="rounded-[2rem] px-6 py-5">
-          <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  href="/dashboard"
-                  className={getButtonClasses({ size: "sm", variant: "ghost" })}
-                >
-                  Back to library
-                </Link>
-                <div className="eyebrow">Saved SOP</div>
-              </div>
-
-              <div className="space-y-2">
-                <h1 className="max-w-4xl text-h1 font-semibold tracking-tight text-foreground">
-                  {sop.title}
-                </h1>
-                <p className="max-w-2xl text-sm leading-6 text-muted">
-                  Structured plain-text SOP with preserved spacing, original notes, and any
-                  attached source files.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 text-sm text-muted sm:flex-row sm:flex-wrap">
-                <div className="rounded-full border border-border bg-surface-muted px-4 py-2">
-                  Created {formatDateTime(sop.created_at)}
-                </div>
-                <div className="rounded-full border border-border bg-surface-muted px-4 py-2">
-                  Updated {formatDateTime(sop.updated_at)}
-                </div>
-              </div>
+    <div className="w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 lg:gap-16">
+        <div className="lg:col-span-8">
+          <header className="mb-12">
+            <div className="flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.15em] text-muted-foreground mb-5">
+              <span className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[14px]">calendar_today</span>
+                {formatDateTime(sop.created_at)}
+              </span>
             </div>
 
-            <CopyButton content={sop.content} />
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 font-display">
+              {sop.title}
+            </h1>
+
+            <div className="flex items-center gap-3">
+              <CopyButton content={sop.content} />
+            </div>
+          </header>
+
+          <SopContent content={sop.content} structuredData={sop.structured_data} title={sop.title} />
+        </div>
+
+        <aside className="lg:col-span-4">
+          <div className="sticky top-10 space-y-8">
+            <SopAgentPanel sopId={sop.id} />
+            <AuditAction sopId={sop.id} />
+
+            {sop.raw_notes.trim() ? (
+              <Accordion
+                className="bg-[var(--surface)] rounded-xl border border-[var(--border)] overflow-hidden"
+                contentClassName="px-5 pb-5 pt-0"
+                summaryClassName="w-full p-5 flex items-center justify-between text-left group transition-colors hover:bg-[var(--surface-muted)]"
+                summary={
+                  <span className="font-semibold flex items-center gap-3">
+                    <span className="material-symbols-outlined text-muted">history_edu</span> Original Notes
+                  </span>
+                }
+              >
+                <div className="whitespace-pre-wrap font-mono text-[12px] leading-relaxed text-muted max-h-96 overflow-y-auto">
+                  {sop.raw_notes}
+                </div>
+              </Accordion>
+            ) : null}
+
+            <div className="space-y-4">
+              <h3 className="text-xs font-mono uppercase tracking-[0.15em] text-muted-foreground px-1">Attachments</h3>
+              <AttachmentsSection attachments={attachments} sopId={sop.id} />
+            </div>
+
+            <DownloadButtons sop={{ title: sop.title, content: sop.content }} />
+
+            <VersionHistory sopId={sop.id} versions={versions} />
+
+            <RegenerateButton sopId={sop.id} />
+
+            <DeleteSopButton sopId={sop.id} sopTitle={sop.title} />
           </div>
-        </Card>
+        </aside>
       </div>
-
-      <Card as="article" className="rounded-[2rem] px-6 py-7 sm:px-7 sm:py-8">
-        <div className="border-b border-border pb-4">
-          <p className="text-sm font-semibold text-foreground">Generated SOP</p>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            Plain text output with preserved spacing and section hierarchy for easier review.
-          </p>
-        </div>
-        <div className="mt-6">
-          <SopContent content={sop.content} title={sop.title} />
-        </div>
-      </Card>
-
-      <Card className="rounded-[2rem] px-6 py-6">
-        <AttachmentsSection attachments={attachments} sopId={sop.id} />
-      </Card>
-
-      {sop.raw_notes.trim() ? (
-        <Accordion
-          className="surface-card rounded-[2rem]"
-          contentClassName="px-6 pb-5 pt-0"
-          summaryClassName="px-6 py-5 text-sm font-semibold"
-          summary="Original notes"
-        >
-          <pre className="mt-4 whitespace-pre-wrap font-mono text-sm leading-7 text-muted">
-            {sop.raw_notes}
-          </pre>
-        </Accordion>
-      ) : null}
-    </section>
+    </div>
   );
 }

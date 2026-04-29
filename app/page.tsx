@@ -1,94 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { Accordion } from "@/components/ui/Accordion";
-import { getButtonClasses } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import { Container } from "@/components/ui/Container";
-import { Grid } from "@/components/ui/Grid";
 import { getOptionalUser } from "@/lib/auth";
-
-const featureCards = [
-  {
-    title: "From rough notes to usable SOPs",
-    body: "Paste handoff bullets, reminders, and messy steps. SOPSmith shapes them into something a teammate can actually run.",
-  },
-  {
-    title: "Structured for operations work",
-    body: "Every SOP lands with purpose, scope, steps, checks, and a checklist so the output feels practical, not generic.",
-  },
-  {
-    title: "A lightweight private library",
-    body: "Save SOPs in one place, reopen them in seconds, and copy the final text anywhere your team already works.",
-  },
-];
-
-const faqs = [
-  {
-    question: "Who is SOPSmith for?",
-    answer:
-      "SOPSmith is built for operators, agencies, and small teams that need clean process docs fast without setting up a heavyweight knowledge base.",
-  },
-  {
-    question: "Do I need polished writing before generating?",
-    answer:
-      "No. Rough bullets, partial notes, and handoff details are enough. The app is designed to turn unfinished notes into a usable SOP draft.",
-  },
-  {
-    question: "How are SOPs stored?",
-    answer:
-      "Each SOP is saved to your own Supabase-backed library and scoped to your signed-in account with row-level security.",
-  },
-  {
-    question: "Can I add source files too?",
-    answer:
-      "Yes. You can attach PDFs, DOC or DOCX files, and TXT notes to each SOP so the original context stays with the final procedure.",
-  },
-  {
-    question: "How long does generation take?",
-    answer:
-      "Most SOPs generate in a few seconds, depending on note length, current auth state, and model response time.",
-  },
-];
-
-const sampleSop = `# Client Onboarding Handoff
-
-## Purpose
-Move a newly signed client from sales to delivery with clear ownership and no missing setup.
-Owner: Operations
-
-## Scope
-Use this after contract signature and before kickoff is booked.
-
-## Tools Needed
-- CRM
-- Project tracker
-- Shared inbox
-
-## Inputs
-- Signed agreement
-- Client contacts
-- Internal delivery owner
-
-## Steps
-1. Confirm the signed agreement and primary contacts (5-10 minutes).
-2. Create the project workspace and assign the delivery owner.
-3. Send kickoff options within one business day.
-
-## Quality Checks
-- Workspace includes the correct client name and owner.
-- Kickoff options are sent to the right contact.
-
-## Checklist
-- [ ] Contract confirmed
-- [ ] Workspace created
-- [ ] Kickoff options sent
-
-## Notes
-If billing contacts are missing, pause kickoff scheduling and escalate internally.`;
 
 export const metadata: Metadata = {
   title: "SOPSmith",
@@ -102,133 +15,123 @@ export default async function HomePage() {
   const primaryLabel = user ? "Open your library" : "Start generating SOPs";
 
   return (
-    <main className="page-shell">
-      <Container className="flex min-h-screen flex-col py-6">
-        <SiteHeader
-          signedIn={Boolean(user)}
-          actions={
-            <div className="flex flex-wrap items-center gap-3">
-              {!user ? (
-                <Link href="/login" className={getButtonClasses({ size: "sm", variant: "secondary" })}>
-                  Sign in
-                </Link>
-              ) : null}
-              <Link href={primaryHref} className={getButtonClasses({ size: "sm" })}>
-                {primaryLabel}
-              </Link>
-            </div>
-          }
-        />
-
-        <Grid className="flex-1 items-center py-14 lg:grid-cols-[1.02fr_0.98fr] lg:py-20" gap="lg">
-          <div className="space-y-8">
-            <div className="eyebrow">AI workflow for operators</div>
-
-            <div className="space-y-5">
-              <h1 className="max-w-3xl text-display font-semibold tracking-tight text-foreground">
-                Turn rough process notes into SOPs your team can run the same day.
-              </h1>
-              <p className="section-copy text-lg sm:text-xl">
-                SOPSmith is a focused SaaS for small teams, agencies, and operators who
-                need structured procedures without building a heavy documentation stack.
-              </p>
-            </div>
-
-            <div
-              className="flex flex-col gap-3 sm:flex-row"
-              role="group"
-              aria-label="Primary calls to action"
+    <div className="relative flex min-h-screen flex-col bg-background-light dark:bg-background-dark text-foreground">
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 w-full border-b border-[var(--border)] bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-lg">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-2xl font-bold tracking-tight font-display text-foreground">SOPSmith</span>
+          </Link>
+          <nav className="flex items-center gap-4">
+            <Link
+              href="/pricing"
+              className="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
             >
-              <Link href={primaryHref} className={getButtonClasses({ size: "lg" })}>
+              Pricing
+            </Link>
+            <Link
+              href={primaryHref}
+              className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all"
+            >
+              Open App
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="flex-1">
+        {/* Hero Section — Full Viewport */}
+        <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/8 dark:bg-primary/5 rounded-full blur-[120px]" />
+          </div>
+          <div className="container mx-auto px-6 py-24 max-w-4xl">
+            <div className="flex flex-col gap-8 items-center text-center">
+              <h1
+                className="text-6xl sm:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight font-display"
+                style={{ textWrap: "balance" } as React.CSSProperties}
+              >
+                Turn rough notes<br />
+                into <em className="text-primary">agentic SOPs</em><br />
+                agencies can run.
+              </h1>
+              <p className="text-lg sm:text-xl text-muted max-w-xl leading-relaxed">
+                Paste messy client delivery notes. SOPSmith shapes them into structured SOPs,
+                audits quality, logs agent work, and keeps approvals under your control.
+              </p>
+              <Link
+                href={primaryHref}
+                className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg shadow-primary/20 inline-flex items-center gap-3"
+              >
                 {primaryLabel}
-              </Link>
-              <Link href="#faq" className={getButtonClasses({ size: "lg", variant: "secondary" })}>
-                Explore the workflow
+                <span className="material-symbols-outlined text-lg">arrow_right_alt</span>
               </Link>
             </div>
+          </div>
+        </section>
 
-            <Grid className="sm:grid-cols-3">
-              {featureCards.map((feature) => (
-                <Card key={feature.title} className="rounded-[1.75rem] px-5 py-5">
-                  <h2 className="text-base font-semibold tracking-tight text-foreground">
-                    {feature.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-6 text-muted">{feature.body}</p>
-                </Card>
+        {/* How It Works — 3 Columns */}
+        <section className="py-28 border-y border-[var(--border)]">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <div className="text-center mb-16">
+              <span className="text-primary font-mono text-xs font-medium uppercase tracking-[0.2em] block mb-3">How it works</span>
+              <h2 className="text-3xl sm:text-4xl font-bold font-display tracking-tight">Three steps. One result.</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-12 md:gap-8">
+              {[
+                {
+                  num: "01",
+                  title: "Write your notes",
+                  body: "Paste the bullets, reminders, and messy handoff steps you already have. No polished writing required.",
+                },
+                {
+                  num: "02",
+                  title: "Generate the SOP",
+                  body: "SOPSmith structures your notes into a clean procedure with purpose, scope, steps, checks, and a checklist.",
+                },
+                {
+                  num: "03",
+                  title: "Use & share",
+                  body: "Copy the SOP, download it as TXT or PDF, or share the link. Your team can follow it the same day.",
+                },
+              ].map((step) => (
+                <div key={step.num} className="flex flex-col gap-4">
+                  <span className="text-primary font-mono text-4xl font-bold opacity-30">{step.num}</span>
+                  <h3 className="text-xl font-bold font-display tracking-tight">{step.title}</h3>
+                  <p className="text-muted text-[15px] leading-relaxed">{step.body}</p>
+                </div>
               ))}
-            </Grid>
+            </div>
           </div>
+        </section>
 
-          <div className="space-y-5">
-            <Card as="section" className="overflow-hidden rounded-[2rem]" tone="strong">
-              <div className="border-b border-border bg-surface-muted px-6 py-4">
-                <p className="text-sm font-medium text-muted">Product preview</p>
-              </div>
-              <div className="relative aspect-[12/9] overflow-hidden bg-surface-strong">
-                <Image
-                  src="/hero-sopsmith.svg"
-                  alt="SOPSmith interface preview showing rough notes turning into a structured operating procedure."
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 44rem, 100vw"
-                />
-              </div>
-            </Card>
-
-            <Card as="section" className="overflow-hidden rounded-[2rem]" tone="strong">
-              <div className="border-b border-border bg-surface-muted px-6 py-4">
-                <p className="text-sm font-medium text-muted">Sample SOP output</p>
-              </div>
-              <div className="bg-surface-strong px-6 py-6">
-                <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-sm leading-7 text-foreground">
-                  {sampleSop}
-                </pre>
-              </div>
-            </Card>
-          </div>
-        </Grid>
-
-        <Grid className="border-t border-border py-12 sm:grid-cols-3">
-          {[
-            "Capture the title, rough notes, and source files you already have.",
-            "Generate a structured SOP with practical steps and checks.",
-            "Save it, reopen it, attach context, and copy it anywhere.",
-          ].map((step, index) => (
-            <Card key={step} className="rounded-[1.75rem] px-5 py-5">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
-                Step {index + 1}
-              </p>
-              <p className="mt-3 text-base leading-7 text-foreground">{step}</p>
-            </Card>
-          ))}
-        </Grid>
-
-        <Grid id="faq" className="py-6 lg:grid-cols-[0.7fr_1.3fr] lg:py-10">
-          <div className="space-y-4">
-            <div className="eyebrow">FAQ</div>
-            <h2 className="text-h2 font-semibold tracking-tight text-foreground">
-              Straight answers for a lean SOP workflow.
+        {/* CTA */}
+        <section className="py-24">
+          <div className="container mx-auto px-6 text-center max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-bold font-display tracking-tight mb-6">
+              Stop explaining the same process twice.
             </h2>
-            <p className="section-copy">
-              SOPSmith stays intentionally focused: capture rough notes, generate a
-              practical SOP, save it privately, and reuse it whenever the work repeats.
+            <p className="text-muted text-lg mb-10 leading-relaxed">
+              Write it once. Let SOPSmith turn it into something your team can use.
             </p>
+            <Link
+              href={primaryHref}
+              className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg shadow-primary/20 inline-flex items-center gap-3"
+            >
+              {primaryLabel}
+              <span className="material-symbols-outlined text-lg">arrow_right_alt</span>
+            </Link>
           </div>
+        </section>
+      </main>
 
-          <Grid>
-            {faqs.map((item) => (
-              <Accordion
-                key={item.question}
-                summary={<span className="text-base font-semibold tracking-tight">{item.question}</span>}
-              >
-                {item.answer}
-              </Accordion>
-            ))}
-          </Grid>
-        </Grid>
-
-        <SiteFooter />
-      </Container>
-    </main>
+      {/* Footer */}
+      <footer className="border-t border-[var(--border)] py-8">
+        <div className="container mx-auto px-6 flex items-center justify-between">
+          <span className="text-sm font-display font-semibold text-muted-foreground">SOPSmith</span>
+          <span className="text-xs text-muted-foreground">© {new Date().getFullYear()}</span>
+        </div>
+      </footer>
+    </div>
   );
 }

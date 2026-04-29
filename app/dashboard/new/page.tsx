@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 
 import { CreateSopForm } from "@/components/dashboard/create-sop-form";
-import { Card } from "@/components/ui/Card";
-import { Grid } from "@/components/ui/Grid";
 
 export const metadata: Metadata = {
   title: "New SOP",
@@ -11,48 +9,61 @@ export const metadata: Metadata = {
 
 export default function NewSopPage() {
   return (
-    <Grid as="section" className="lg:grid-cols-[0.92fr_1.08fr]" gap="md">
-      <Card className="space-y-5 rounded-[2rem] px-6 py-6">
-        <div className="space-y-3">
-          <div className="eyebrow">Generate SOP</div>
-          <h1 className="text-h1 font-semibold tracking-tight text-foreground">
-            Turn rough process notes and source files into a polished SOP draft.
-          </h1>
-          <p className="section-copy">
-            Add a strong title and the rough notes you already have. The better your source
-            notes capture the real workflow, the more usable the SOP will be on the first pass.
-          </p>
-        </div>
+    <>
+      <div className="flex items-center gap-2 mb-8">
+        <span className="mono-label text-muted-foreground">Library</span>
+        <span className="material-symbols-outlined text-xs text-muted-foreground">chevron_right</span>
+        <span className="mono-label text-foreground">New SOP</span>
+      </div>
 
-        <Card className="rounded-[1.5rem] px-5 py-5">
-          <p className="text-sm font-semibold text-foreground">Include these details when you can</p>
-          <ul className="mt-3 space-y-3 text-sm leading-6 text-muted">
-            <li>The trigger or start point that kicks off the process</li>
-            <li>The owner or role responsible for doing the work</li>
-            <li>Key steps, tools used, and the expected output</li>
-            <li>Approvals, quality checks, and what counts as done</li>
-            <li>Edge cases, blockers, delays, or escalation paths</li>
-          </ul>
-        </Card>
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
+        {/* Left Column: Guidance Panel */}
+        <aside className="w-full lg:w-[32%] space-y-8">
+          <div className="space-y-5">
+            <h3 className="text-xs font-mono uppercase tracking-[0.15em] text-primary">Tips for good notes</h3>
+            <ul className="space-y-6">
+              <li className="flex gap-4">
+                <span className="material-symbols-outlined text-primary text-[18px] mt-0.5">edit_note</span>
+                <div>
+                  <p className="text-[15px] font-semibold">Write how you would explain it</p>
+                  <p className="text-sm text-muted leading-relaxed mt-1">Imagine you are walking a teammate through the process for the first time.</p>
+                </div>
+              </li>
+              <li className="flex gap-4">
+                <span className="material-symbols-outlined text-primary text-[18px] mt-0.5">checklist</span>
+                <div>
+                  <p className="text-[15px] font-semibold">Include the small steps</p>
+                  <p className="text-sm text-muted leading-relaxed mt-1">The details people forget — which tool to open, who to notify, what to check — make the best SOPs.</p>
+                </div>
+              </li>
+              <li className="flex gap-4">
+                <span className="material-symbols-outlined text-primary text-[18px] mt-0.5">build</span>
+                <div>
+                  <p className="text-[15px] font-semibold">Mention tools and inputs</p>
+                  <p className="text-sm text-muted leading-relaxed mt-1">Name the apps, documents, or contacts needed. SOPSmith will pull them into separate sections.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
 
-        <Card className="rounded-[1.5rem] px-5 py-5">
-          <p className="text-sm font-semibold text-foreground">Optional file uploads</p>
-          <ul className="mt-3 space-y-3 text-sm leading-6 text-muted">
-            <li>Attach PDFs, DOC or DOCX files, and TXT notes after the SOP draft is created</li>
-            <li>Keep source material with the SOP so anyone opening it can trust the context</li>
-            <li>Use uploads for handoff docs, QA checklists, brief notes, and working instructions</li>
-          </ul>
-        </Card>
+          <div className="p-5 rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+            <span className="mono-label text-primary mb-2 block">Quick tip</span>
+            <p className="text-sm text-muted leading-relaxed italic">
+              Start with the workflow you explain most often. Rough bullets are fine; SOPSmith will structure them.
+            </p>
+          </div>
+        </aside>
 
-        <Card tone="muted" className="rounded-[1.5rem] px-5 py-5 text-sm leading-6 text-muted">
-          Keep the notes messy if you want. SOPSmith is designed to clean up real-world
-          scraps like bullets, half sentences, handoff notes, and operational reminders.
-        </Card>
-      </Card>
+        {/* Right Column: Form Area */}
+        <section className="flex-1 space-y-10">
+          <div className="space-y-3">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight font-display">Turn your notes into a procedure.</h1>
+            <p className="text-muted text-lg">Paste your rough notes and SOPSmith will generate a structured SOP.</p>
+          </div>
 
-      <Card className="rounded-[2rem] px-6 py-6">
-        <CreateSopForm />
-      </Card>
-    </Grid>
+          <CreateSopForm />
+        </section>
+      </div>
+    </>
   );
 }

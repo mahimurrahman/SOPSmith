@@ -7,7 +7,7 @@ type SupabaseErrorLike = {
   message?: string;
 };
 
-export type SopsAction = "list" | "detail" | "create" | "schema";
+export type SopsAction = "list" | "detail" | "create" | "schema" | "update" | "delete";
 export type CreateSopStage = "auth" | "schema" | "generate" | "save";
 
 export function getSchemaRepairMessage() {
@@ -20,7 +20,12 @@ export function getSopsUserMessage(action: SopsAction, error: SupabaseErrorLike)
     .join(" ")
     .toLowerCase();
 
-  if (error.code === "42703" || combined.includes("raw_notes") || combined.includes("updated_at")) {
+  if (
+    error.code === "42703" ||
+    combined.includes("raw_notes") ||
+    combined.includes("updated_at") ||
+    combined.includes("structured_data")
+  ) {
     return getSchemaRepairMessage();
   }
 

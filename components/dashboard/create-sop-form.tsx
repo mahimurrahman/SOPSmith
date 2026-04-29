@@ -16,7 +16,11 @@ import { formatFileSize } from "@/lib/format";
 import type { CreateSopActionState } from "@/lib/types";
 
 import { Button } from "../ui/Button";
+import { Card } from "../ui/Card";
+import { Input } from "../ui/Input";
+import { Textarea } from "../ui/Textarea";
 import { useToast } from "../ui/toast-provider";
+import { cn } from "@/lib/cn";
 import type { FileUploadItemView } from "./file-uploader";
 
 const FileUploader = dynamic(
@@ -258,8 +262,11 @@ export function CreateSopForm() {
   const hasPendingUploads = files.some((file) => file.status !== "success");
   const failedUploads = files.filter((file) => file.status === "error");
 
+  const hasFiles = files.length > 0;
+  
   return (
     <form action={formAction} className="space-y-7" aria-label="Create SOP form">
+      <input type="hidden" name="hasFiles" value={hasFiles ? "true" : "false"} />
       <CreateSopFormFields
         createdSopId={createdSopId}
         failedUploadsCount={failedUploads.length}
@@ -283,6 +290,7 @@ export function CreateSopForm() {
         }}
         state={state}
         uploadStatusMessage={uploadStatusMessage}
+        hasFiles={hasFiles}
       />
     </form>
   );
@@ -300,6 +308,7 @@ type CreateSopFormFieldsProps = {
   onViewSop: () => void;
   state: CreateSopActionState;
   uploadStatusMessage: string;
+  hasFiles: boolean;
 };
 
 function CreateSopFormFields({
@@ -314,6 +323,7 @@ function CreateSopFormFields({
   onViewSop,
   state,
   uploadStatusMessage,
+  hasFiles,
 }: CreateSopFormFieldsProps) {
   const { pending } = useFormStatus();
   const values = state.values ?? {
@@ -333,35 +343,20 @@ function CreateSopFormFields({
 
   return (
     <fieldset
-      className="space-y-7 disabled:opacity-80"
+      className="space-y-8 disabled:opacity-80"
       disabled={pending || isUploading}
       aria-busy={pending || isUploading}
     >
-      <div className="space-y-2">
-        <div className="eyebrow">SOP details</div>
-        <h2 className="text-3xl font-semibold tracking-tight text-foreground">
-          Capture the workflow, then generate.
-        </h2>
-        <p className="text-sm leading-6 text-muted">
-          You do not need polished writing. Focus on the real workflow, who owns it, what
-          starts it, what tools are involved, and what a correct outcome looks like.
-        </p>
-      </div>
-
-      <label className="block space-y-2">
-        <span className="text-sm font-medium text-foreground">What should this SOP be called?</span>
-        <p className="text-sm leading-6 text-muted">
-          Use the actual process name your team would search for later. Clear titles make
-          the library much easier to scan and trust.
-        </p>
-        <input
+      <label className="block space-y-3">
+        <span className="mono-label text-slate-500 dark:text-slate-400 block">Procedure Title</span>
+        <Input
           required
           name="title"
           defaultValue={values.title}
           minLength={5}
           maxLength={120}
-          placeholder="Client onboarding handoff"
-          className={`field-input ${state.fieldErrors?.title ? "border-rose-400 focus:border-rose-400 focus:shadow-none" : ""}`}
+          placeholder="e.g., Client onboarding handoff"
+          className={cn("w-full glass-input px-5 py-4 rounded-xl bg-white/50 dark:bg-transparent text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-700", state.fieldErrors?.title && "border-rose-400 focus:border-rose-400 focus:shadow-none")}
           aria-invalid={Boolean(state.fieldErrors?.title)}
           aria-describedby={state.fieldErrors?.title ? "title-error" : "title-help"}
           aria-required="true"
@@ -369,43 +364,46 @@ function CreateSopFormFields({
           onInvalid={setTitleValidationMessage}
         />
         {state.fieldErrors?.title ? (
-          <p id="title-error" className="text-sm text-rose-300" role="alert">
+          <p id="title-error" className="text-sm text-rose-500 dark:text-rose-400" role="alert">
             {state.fieldErrors.title}
           </p>
         ) : (
-          <p id="title-help" className="text-xs text-muted">
-            Examples: Client onboarding handoff, Weekly reporting QA review, New hire laptop setup
+          <p id="title-help" className="text-[11px] text-slate-500 uppercase tracking-wide">
+            Use the actual process name your team would search for later.
           </p>
         )}
       </label>
 
-      <label className="block space-y-2">
-        <span className="text-sm font-medium text-foreground">Paste the rough source notes</span>
-        <p className="text-sm leading-6 text-muted">
-          Include the trigger or start point, owner or role, key steps, tools, expected
-          output, approvals or quality checks, and any edge cases that change the flow.
-        </p>
-        <textarea
-          required
+      <label className="block space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="mono-label text-slate-500 dark:text-slate-400">Operational Raw Data</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-600 font-mono">SUPPORT REQUIRED</span>
+        </div>
+        <Textarea
+          required={!hasFiles}
           name="rawNotes"
           defaultValue={values.rawNotes}
-          minLength={60}
+          minLength={hasFiles ? undefined : 20}
           maxLength={6000}
-          rows={16}
-          placeholder={messyNotesExample}
-          className={`field-input resize-y ${state.fieldErrors?.rawNotes ? "border-rose-400 focus:border-rose-400 focus:shadow-none" : ""}`}
+          rows={12}
+          placeholder="Input workflow fragments, meeting transcripts, or rough instructional steps..."
+          className={cn("w-full glass-input px-5 py-4 rounded-xl bg-white/50 dark:bg-transparent text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-700 resize-y font-sans leading-relaxed", state.fieldErrors?.rawNotes && "border-rose-400 focus:border-rose-400 focus:shadow-none")}
           aria-invalid={Boolean(state.fieldErrors?.rawNotes)}
           aria-describedby={state.fieldErrors?.rawNotes ? "raw-notes-error" : "raw-notes-help"}
           aria-required="true"
           onInput={clearCustomValidity}
-          onInvalid={setRawNotesValidationMessage}
+          onInvalid={(e) => {
+            if (!hasFiles) {
+              setRawNotesValidationMessage(e);
+            }
+          }}
         />
         {state.fieldErrors?.rawNotes ? (
-          <p id="raw-notes-error" className="text-sm text-rose-300" role="alert">
+          <p id="raw-notes-error" className="text-sm text-rose-500 dark:text-rose-400" role="alert">
             {state.fieldErrors.rawNotes}
           </p>
         ) : (
-          <p id="raw-notes-help" className="text-xs text-muted">
+          <p id="raw-notes-help" className="text-[11px] text-slate-500 uppercase tracking-wide">
             Aim for coverage, not polish. Messy bullets are fine if the operational details are there.
           </p>
         )}
@@ -419,13 +417,13 @@ function CreateSopFormFields({
       />
 
       {state.status === "error" && state.message ? (
-        <div
+        <Card
           aria-live="polite"
           role="alert"
           className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm leading-6 text-rose-200"
         >
           {state.message}
-        </div>
+        </Card>
       ) : null}
 
       <div className="sr-only" aria-live="polite">
@@ -516,9 +514,15 @@ function GenerateSopButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending} className="min-w-52">
-      {pending ? <PendingGenerationStage /> : "Generate SOP"}
-    </Button>
+    <div className="pt-6 w-full">
+      <button
+        type="submit"
+        disabled={pending}
+        className="w-full py-5 bg-primary hover:bg-primary/90 text-white rounded-xl font-extrabold text-[15px] tracking-wide shadow-[0_20px_40px_-15px_rgba(60,131,246,0.3)] transition-all active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none uppercase"
+      >
+        {pending ? <PendingGenerationStage /> : "Generate SOP"}
+      </button>
+    </div>
   );
 }
 
@@ -634,11 +638,9 @@ function setRawNotesValidationMessage(event: FormEvent<HTMLTextAreaElement>) {
   const textarea = event.currentTarget;
 
   if (textarea.validity.valueMissing) {
-    textarea.setCustomValidity("Add rough notes before generating the SOP.");
+    textarea.setCustomValidity("Add some rough notes before generating an SOP.");
   } else if (textarea.validity.tooShort) {
-    textarea.setCustomValidity(
-      "Add a little more detail: include the trigger, steps, owner, tools, output, checks, or edge cases.",
-    );
+    textarea.setCustomValidity("Add at least a few notes for SOPSmith to work from.");
   } else if (textarea.validity.tooLong) {
     textarea.setCustomValidity("Keep the rough notes under 6,000 characters.");
   } else {

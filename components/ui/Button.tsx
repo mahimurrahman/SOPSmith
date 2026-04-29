@@ -24,7 +24,7 @@ export function getButtonClasses({
     size === "sm" && "min-h-10 px-4 py-2 text-sm",
     size === "md" && "min-h-11 px-5 py-3 text-[0.95rem]",
     size === "lg" && "min-h-12 px-6 py-3 text-base",
-    variant === "primary" && "bg-foreground text-accent-foreground shadow-soft hover:-translate-y-0.5 hover:opacity-95",
+    variant === "primary" && "bg-accent text-accent-foreground shadow-soft hover:-translate-y-0.5 hover:brightness-110",
     variant === "secondary" && "border border-border bg-surface-muted text-foreground hover:-translate-y-0.5 hover:bg-surface",
     variant === "ghost" && "text-foreground hover:bg-surface-muted",
     className,

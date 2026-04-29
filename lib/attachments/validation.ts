@@ -8,9 +8,14 @@ import {
   MAX_ATTACHMENT_SIZE_BYTES,
   MIME_TO_EXTENSION,
 } from "./shared";
+import { extractTextFromFile } from "./extraction";
 import type { AllowedAttachmentMimeType, AttachmentUploadInput } from "./types";
 
 export { ATTACHMENT_SIGNED_URL_TTL_SECONDS, ATTACHMENTS_BUCKET, MAX_ATTACHMENT_SIZE_BYTES } from "./shared";
+
+function getAttachmentLimitMessage(label: string) {
+  return `${label} exceeds the ${(MAX_ATTACHMENT_SIZE_BYTES / (1024 * 1024)).toFixed(0)} MB upload limit.`;
+}
 
 function buildAttachmentStoragePath(sopId: string, fileType: AllowedAttachmentMimeType) {
   return `${sopId}/${crypto.randomUUID()}.${MIME_TO_EXTENSION[fileType]}`;
@@ -29,10 +34,10 @@ export function readAttachmentFiles(formData: FormData) {
 }
 
 export function validateAttachmentFiles(sopId: string, files: File[]) {
-  return files.map((file) => validateAttachmentFile(sopId, file));
+  return Promise.all(files.map((file) => validateAttachmentFile(sopId, file)));
 }
 
-function validateAttachmentFile(sopId: string, file: File): AttachmentUploadInput {
+async function validateAttachmentFile(sopId: string, file: File): Promise<AttachmentUploadInput> {
   const label = getAttachmentLabel(file.name);
 
   if (!isAllowedAttachmentMimeType(file.type)) {
@@ -47,7 +52,16 @@ function validateAttachmentFile(sopId: string, file: File): AttachmentUploadInpu
   }
 
   if (file.size > MAX_ATTACHMENT_SIZE_BYTES) {
-    throw createAttachmentRouteError(`${label} exceeds the 5 MB upload limit.`, 400);
+    throw createAttachmentRouteError(getAttachmentLimitMessage(label), 400);
+  }
+
+  let extractedText: string | null = null;
+
+  try {
+    const extracted = await extractTextFromFile(file);
+    extractedText = extracted || null;
+  } catch {
+    extractedText = null;
   }
 
   return {
@@ -55,6 +69,7 @@ function validateAttachmentFile(sopId: string, file: File): AttachmentUploadInpu
     fileName: getSafeAttachmentName(file.name, file.type),
     fileSize: file.size,
     fileType: file.type,
+    extractedText,
     storagePath: buildAttachmentStoragePath(sopId, file.type),
   };
 }

@@ -4,7 +4,6 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { sendMagicLinkAction } from "@/app/login/actions";
-import { Button } from "@/components/ui/Button";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { LoginActionState } from "@/lib/types";
 
@@ -75,82 +74,86 @@ export function LoginForm({ nextPath, notice }: LoginFormProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-3">
-        <div className="eyebrow">Sign in</div>
-        <h2 className="text-3xl font-semibold tracking-tight text-foreground">
-          Check your inbox, then continue in one click.
-        </h2>
-        <p className="text-sm leading-6 text-muted">
-          Use the same email address you want tied to your SOP library. The sign-in link
-          works best when opened in the same browser you used here.
-        </p>
-      </div>
-
-      <form action={formAction} className="space-y-5" aria-label="Magic link sign in form">
-        <input type="hidden" name="next" value={nextPath} />
-
-        <label className="block space-y-2">
-          <span className="text-sm font-medium text-foreground">Email address</span>
-          <p className="text-sm leading-6 text-muted">
-            We will send a one-time login link. No password required.
-          </p>
-          <input
-            required
-            type="email"
-            name="email"
-            placeholder="you@company.com"
-            className="field-input"
-            autoComplete="email"
-            aria-required="true"
-          />
-        </label>
-
-        {activeNotice?.message ? (
-          <div
-            role="status"
-            aria-live="polite"
-            className={`rounded-2xl border px-4 py-3 text-sm leading-6 ${
-              activeNotice.tone === "success"
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
-                : "border-rose-500/30 bg-rose-500/10 text-rose-200"
-            }`}
-          >
-            {activeNotice.message}
-          </div>
-        ) : null}
-
-        <div className="muted-panel rounded-2xl px-4 py-3 text-xs leading-6 text-muted">
-          If the email takes a minute, check spam, promotions, or any email security filter.
+    <div className="bg-[var(--surface)] border border-[var(--border)] w-full rounded-2xl p-0 md:p-10 md:shadow-lg">
+      <div className="flex flex-col gap-8 md:p-0 p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold font-display text-foreground mb-2 tracking-tight">Log in to SOPSmith</h1>
+          <p className="text-muted text-sm leading-relaxed">Secure your workflow with magic link and Google SSO.</p>
         </div>
 
-        <LoginSubmitButton />
-      </form>
+        <form action={formAction} className="flex flex-col gap-5">
+          <input type="hidden" name="next" value={nextPath} />
 
-      <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-        <div className="h-px flex-1 bg-border" />
-        <span>Or</span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
-      <div className="space-y-3">
-        <Button
-          onClick={handleGoogleSignIn}
-          disabled={isGooglePending}
-          variant="secondary"
-          className="w-full"
-        >
-          {isGooglePending ? "Connecting to Google..." : "Continue with Google"}
-        </Button>
-
-        {googleError ? (
-          <div
-            role="alert"
-            className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm leading-6 text-rose-200"
-          >
-            {googleError}
+          <div className="flex flex-col gap-2">
+            <label className="text-muted-foreground text-[11px] font-mono uppercase tracking-[0.15em] px-1">Work Email</label>
+            <div className="relative group">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-xl group-focus-within:text-primary transition-colors duration-300">mail</span>
+              <input
+                required
+                type="email"
+                name="email"
+                placeholder="e.g. ops@company.com"
+                className="w-full bg-[var(--surface-muted)] border border-[var(--border)] rounded-xl py-3 pl-12 pr-4 text-foreground placeholder:text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm"
+                autoComplete="email"
+                aria-required="true"
+              />
+            </div>
           </div>
-        ) : null}
+
+          {activeNotice?.message ? (
+            <div
+              role="status"
+              aria-live="polite"
+              className={`w-full rounded-xl px-5 py-4 flex items-start gap-4 ${
+                activeNotice.tone === "success"
+                  ? "border border-[var(--success)] bg-[var(--success)]/10 text-[var(--success)]"
+                  : "border border-[var(--danger)] bg-[var(--danger)]/10 text-[var(--danger)]"
+              }`}
+            >
+              <span className={`material-symbols-outlined text-2xl font-light ${activeNotice.tone === "success" ? "text-[var(--success)]" : "text-[var(--danger)]"}`}>
+                {activeNotice.tone === "success" ? "verified_user" : "error"}
+              </span>
+              <div className="flex-1">
+                <p className={`text-[13px] font-bold font-display tracking-tight ${activeNotice.tone === "success" ? "text-[var(--success)]" : "text-[var(--danger)]"}`}>
+                  {activeNotice.tone === "success" ? "Link sent" : "Error"}
+                </p>
+                <p className="text-sm leading-snug opacity-90">{activeNotice.message}</p>
+              </div>
+            </div>
+          ) : null}
+
+          <LoginSubmitButton />
+        </form>
+
+        <div className="flex items-center gap-4 py-1">
+          <div className="h-[1px] flex-1 border-t border-[var(--border)]"></div>
+          <span className="text-muted-foreground text-[10px] uppercase tracking-[0.2em] font-mono">Or connect</span>
+          <div className="h-[1px] flex-1 border-t border-[var(--border)]"></div>
+        </div>
+
+        <div className="space-y-3">
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={isGooglePending}
+            type="button"
+            className="w-full bg-[var(--surface)] hover:bg-[var(--surface-muted)] text-foreground font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-3 border border-[var(--border)] text-sm shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <span>{isGooglePending ? "Connecting to Google..." : "Continue with Google"}</span>
+          </button>
+
+          {googleError ? (
+            <div
+              role="alert"
+              className="border border-[var(--danger)] bg-[var(--danger)]/10 w-full rounded-xl px-5 py-4 flex items-start gap-4 text-[var(--danger)]"
+            >
+              <span className="material-symbols-outlined text-[var(--danger)] text-2xl font-light">error</span>
+              <div className="flex-1">
+                <p className="text-[13px] font-bold font-display tracking-tight">Google Connect Error</p>
+                <p className="text-sm leading-snug opacity-90">{googleError}</p>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
@@ -160,12 +163,13 @@ function LoginSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button
+    <button
       type="submit"
       disabled={pending}
-      className="w-full"
+      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-md shadow-primary/20 disabled:opacity-60 disabled:cursor-not-allowed"
     >
-      {pending ? "Sending link..." : "Send magic link"}
-    </Button>
+      <span className="text-sm">{pending ? "Sending Magic Link..." : "Continue with Email"}</span>
+      <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+    </button>
   );
 }
